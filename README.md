@@ -1,69 +1,95 @@
 # create4you.cz
 
-Web agentury create4you – weby, aplikace a CRM na míru, šablonové weby do 48 h, e-shopy (Shoptet i na míru).
-Obsahuje administraci pro správu referencí (včetně fotogalerie), hodnocení klientů, poptávek a nastavení.
+Web agentury create4you – weby, aplikace a CRM na míru, šablonové weby do 48 h a e-shopy.
 
-**Technologie:** PHP 8.1+ · SQLite (bez nutnosti MySQL) · čisté HTML/CSS/JS bez frameworků a buildů.
-Běží na běžném českém webhostingu (Wedos, Forpsi, Active24, Websupport…).
+**Jak to funguje**
 
-## Nasazení na hosting
+- **Netlify** hostuje hotové statické stránky. Web je rychlý, dobrý pro SEO a funguje i ve chvíli, kdy databáze spí.
+- **Supabase** drží obsah (reference, hodnocení, poptávky, nastavení), fotky (Storage) a přihlášení do administrace.
+- Po každé změně v administraci se web na Netlify sám přegeneruje, změny jsou vidět asi za minutu.
+- Kontaktní formulář posílá poptávky přes funkci na Netlify do Supabase a volitelně i e-mailem (Resend).
 
-1. Nahrajte celý obsah složky přes FTP do kořene webu (`www/`).
-2. Ověřte, že hosting má **PHP 8.1 nebo novější** s rozšířeními `pdo_sqlite` a `gd` (bývají standardně zapnuté).
-3. Složky `data/` a `uploads/` musí být zapisovatelné (práva 775 / 755 dle hostingu).
-4. Otevřete `https://create4you.cz/admin/` – při prvním spuštění si založíte administrátorský účet (e-mail + heslo).
-5. V **Nastavení** doplňte telefon, e-mail, DIČ (pokud jste plátce DPH), sídlo a odkazy na sociální sítě.
-
-Databáze se vytvoří automaticky při první návštěvě a naplní se výchozími referencemi.
-
-### Volitelná konfigurace
-Vytvořte `includes/config.local.php` a přepište libovolnou hodnotu z `includes/config.php`, např.:
-
-```php
-<?php
-return [
-    'notify_email' => 'daniel@create4you.cz', // kam chodí upozornění na nové poptávky
-    'mail_from'    => 'web@create4you.cz',     // odesílatel (adresa na vaší doméně)
-];
+```
+public/            statické soubory (CSS, JS, obrázky, administrace)
+  admin/           administrace (přihlášení, reference, hodnocení, poptávky, nastavení)
+src/               šablony stránek (úvod, detail reference, zásady)
+scripts/build.mjs  sestavení webu do dist/ (data ze Supabase, nebo z data/seed.json)
+netlify/functions/ contact (formulář) a publish (zveřejnění změn z administrace)
+supabase/          schema.sql (tabulky + zabezpečení) a seed.sql (výchozí obsah)
+podpis/            e-mailový podpis (index.html = náhled + kopírování)
 ```
 
-### Nginx
-Soubory `.htaccess` platí pro Apache. Na Nginx přidejte ekvivalent:
+---
 
-```nginx
-location ~ ^/(data|includes)/ { deny all; }
-location ~ ^/uploads/.*\.(php|phtml|phar)$ { deny all; }
-```
+## Spuštění krok za krokem
 
-## Administrace (`/admin/`)
+### 1. GitHub
+Vytvořte soukromý repozitář (např. `create4you-web`) a nahrajte do něj tento kód.
+
+### 2. Supabase
+1. Na [supabase.com](https://supabase.com) založte projekt. Region **Central EU (Frankfurt)**, heslo databáze si uložte.
+2. **SQL Editor → New query**: vložte obsah `supabase/schema.sql` a klikněte na **Run**. Totéž udělejte se `supabase/seed.sql`, ten nahraje výchozí obsah webu.
+3. **Authentication → Users → Add user → Create new user**: zadejte svůj e-mail a heslo a zaškrtněte *Auto Confirm User*.
+4. V **SQL Editoru** z účtu udělejte administrátora (doplňte svůj e-mail):
+   ```sql
+   insert into public.admins (user_id) select id from auth.users where email = 'vas@email.cz';
+   ```
+5. **Authentication → Sign In / Providers**: vypněte *Allow new users to sign up*, aby se nikdo cizí nemohl registrovat.
+6. **Project Settings → API**: zkopírujte *Project URL*, klíč *anon / publishable* a klíč *service_role / secret*. Klíč service_role nikomu neposílejte a nikam nevkládejte, patří jen do nastavení Netlify.
+
+### 3. Netlify
+1. **Add new site → Import an existing project → GitHub** a vyberte repozitář. Nastavení sestavení se načte samo z `netlify.toml`.
+2. **Site configuration → Environment variables** přidejte:
+
+   | Proměnná | Hodnota |
+   |---|---|
+   | `SUPABASE_URL` | Project URL ze Supabase |
+   | `SUPABASE_ANON_KEY` | klíč anon / publishable |
+   | `SUPABASE_SERVICE_ROLE_KEY` | klíč service_role (označte jako *secret*) |
+   | `SITE_URL` | `https://create4you.cz` |
+   | `BUILD_HOOK_URL` | viz krok 3 |
+   | `NOTIFY_EMAIL` *(volitelné)* | kam posílat upozornění na poptávky, např. `info@create4you.cz` |
+   | `RESEND_API_KEY` *(volitelné)* | API klíč z [resend.com](https://resend.com) pro e-maily o poptávkách |
+   | `MAIL_FROM` *(volitelné)* | odesílatel, např. `create4you <web@create4you.cz>` (doména ověřená v Resendu) |
+
+3. **Site configuration → Build & deploy → Build hooks → Add build hook** (název „Administrace“). Zkopírovanou adresu vložte do proměnné `BUILD_HOOK_URL`.
+4. **Deploys → Trigger deploy**.
+5. **Domain management → Add a domain**: `create4you.cz`. U registrátora nastavte DNS podle pokynů Netlify. Certifikát HTTPS se vystaví sám.
+
+### 4. Hotovo
+- Web: `https://create4you.cz`
+- Administrace: `https://create4you.cz/admin/` (přihlášení e-mailem a heslem ze Supabase)
+
+> Supabase na bezplatném tarifu po týdnu bez aktivity uspí projekt. **Web běží dál**, protože stránky jsou hotové na Netlify. Uspaný projekt probudíte v dashboardu Supabase tlačítkem *Restore*. Bez toho nepůjde administrace ani formulář.
+
+---
+
+## Administrace
 
 | Sekce | Co umí |
 |---|---|
-| **Přehled** | statistiky, nové poptávky, úkoly před spuštěním |
-| **Reference** | přidání / úprava / skrytí projektu, titulní fotka, galerie s popisky, řazení přetažením, zvýraznění („velká dlaždice“), stav „Právě děláme“ |
-| **Hodnocení** | jméno, firma, text, hvězdičky, fotka, propojení s referencí, řazení |
-| **Poptávky** | vše z kontaktního formuláře, stavy (nová / řeší se / zakázka / uzavřeno), interní poznámky |
-| **Nastavení** | kontakty, fakturační údaje, čísla na úvodní stránce, ceník, sociální sítě, změna hesla |
+| **Přehled** | statistiky, poslední poptávky, co je potřeba dokončit |
+| **Reference** | úpravy textů, screenshot pro počítač a mobil, galerie s popisky, odkazy (jazykové verze), řazení přetažením, skrytí, zvýraznění |
+| **Hodnocení** | autor, firma, text, hvězdičky, fotka, propojení s referencí |
+| **Poptávky** | vše z formuláře, stavy (nová / řeší se / zakázka / uzavřeno), interní poznámky |
+| **Nastavení** | kontakty, fakturační údaje, čísla v úvodu, ceník, sociální sítě, změna hesla |
 
-Nahrané obrázky se automaticky zmenší (max. 2000 px) a převedou do WebP.
+Obrázky se zmenší a převedou do WebP už v prohlížeči. U screenshotů se uloží rozměry, takže se na webu zobrazí v přesném poměru stran a nic se neořízne. Změny se na web propíšou automaticky. Tlačítkem *Web je aktuální / Čeká na zveřejnění* v levém panelu je můžete zveřejnit hned.
 
-## Screenshoty referencí
-Reference se zobrazují v rámečku notebooku a telefonu; screenshot celé stránky se při najetí myší sám roluje.
-Screenshoty lze nahrát ručně v administraci (počítač + mobil), nebo je pořídit automaticky ze zadaných odkazů:
-
-```bash
-npm i playwright && npx playwright install chromium
-php tools/screenshots.php          # reference, které ještě screenshot nemají
-php tools/screenshots.php --all    # přefotit všechny
-```
+Dokud Supabase není nastavený, běží administrace v **ukázkovém režimu**. Data se v něm ukládají jen v prohlížeči.
 
 ## Bezpečnost
-- hesla hashovaná (`password_hash`), ochrana proti hádání hesla (8 pokusů / 15 min)
-- CSRF tokeny na všech formulářích, výstupy escapované
-- nahrané soubory ověřené jako obrázky a znovu zakódované přes GD, v `uploads/` je zakázané spouštění skriptů
-- kontaktní formulář: honeypot, kontrola doby vyplnění, limit 5 poptávek / IP / hodinu
+- Zabezpečení přímo v databázi (Row Level Security): veřejnost čte jen zveřejněný obsah, zapisovat smí jen účty v tabulce `admins`.
+- Poptávky ukládá pouze serverová funkce. Formulář chrání skryté pole, kontrola doby vyplnění a limit 5 poptávek za hodinu z jedné IP adresy.
+- Zveřejnění změn ověřuje přihlášení i oprávnění administrátora.
 
-## Lokální spuštění
+## Lokální vývoj
 ```bash
-php -S localhost:8080
+npm install
+npm run build      # bez proměnných SUPABASE_* použije data/seed.json
+npm run serve      # http://localhost:8090
+npm run seed-sql   # přegeneruje supabase/seed.sql z data/seed.json
 ```
+
+## E-mailový podpis
+Otevřete `podpis/index.html`, klikněte na **Zkopírovat podpis** a vložte ho do nastavení e-mailu (návod je na stránce). Logo se načítá z `https://create4you.cz/assets/img/email/logo.png`, zobrazí se tedy až po spuštění webu.

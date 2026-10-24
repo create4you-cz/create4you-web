@@ -1,0 +1,17 @@
+{
+  "name": "create4you-web",
+  "private": true,
+  "type": "module",
+  "description": "Web create4you.cz – statický web generovaný z dat v Supabase, hostovaný na Netlify",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "seed-sql": "node scripts/seed-sql.mjs",
+    "serve": "python3 -m http.server 8090 --directory dist"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.45.4"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
