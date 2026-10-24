@@ -72,14 +72,15 @@ body::before {
   background: linear-gradient(90deg, var(--violet), var(--lime)); }
 
 /* cursor */
-.cursor { position: fixed; top: 0; left: 0; z-index: 90; pointer-events: none; display: none; }
+.cursor { position: fixed; top: 0; left: 0; z-index: 90; pointer-events: none; display: none; will-change: transform; }
 .cursor span {
-  position: absolute; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: var(--lime);
+  position: absolute; width: 84px; height: 84px; margin: -42px 0 0 -42px; border-radius: 50%; background: var(--lime);
   display: grid; place-items: center; font: 600 12px var(--f-body); color: var(--lime-ink); white-space: nowrap;
-  transition: width .3s var(--ease), height .3s var(--ease), margin .3s var(--ease), background .3s;
+  transform: scale(.12);
+  transition: transform .35s var(--ease), background-color .3s;
 }
-.cursor.link span { width: 44px; height: 44px; margin: -22px 0 0 -22px; background: rgba(198, 244, 50, .18); }
-.cursor.label span { width: 84px; height: 84px; margin: -42px 0 0 -42px; background: var(--lime); }
+.cursor.link span { transform: scale(.52); background: rgba(198, 244, 50, .18); }
+.cursor.label span { transform: scale(1); }
 @media (hover: hover) and (pointer: fine) { .cursor { display: block; } }
 
 /* ---------- buttons ---------- */

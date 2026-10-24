@@ -189,15 +189,24 @@
     // Vlastní kurzor (nativní kurzor zůstává viditelný)
     const cursor = $('.cursor');
     const dot = $('span', cursor);
-    let cx = innerWidth / 2, cy = innerHeight / 2, tx = cx, ty = cy;
-    addEventListener('pointermove', (e) => { tx = e.clientX; ty = e.clientY; });
-    const loop = () => {
-      cx += (tx - cx) * .2;
-      cy += (ty - cy) * .2;
-      cursor.style.transform = `translate3d(${cx}px, ${cy}px, 0)`;
-      requestAnimationFrame(loop);
+    cursor.style.opacity = 0;
+    // Plynulé dotahování nezávislé na snímkové frekvenci; smyčka běží jen při pohybu
+    let cx = 0, cy = 0, tx = 0, ty = 0, last = 0, running = false, seen = false;
+    const place = () => { cursor.style.transform = `translate3d(${cx.toFixed(1)}px, ${cy.toFixed(1)}px, 0)`; };
+    const loop = (now) => {
+      const dt = Math.min(now - last, 64); last = now;
+      const k = 1 - Math.exp(-dt / 45);
+      cx += (tx - cx) * k;
+      cy += (ty - cy) * k;
+      place();
+      if (Math.abs(tx - cx) + Math.abs(ty - cy) > .1) requestAnimationFrame(loop);
+      else { cx = tx; cy = ty; place(); running = false; }
     };
-    loop();
+    addEventListener('pointermove', (e) => {
+      tx = e.clientX; ty = e.clientY;
+      if (!seen) { seen = true; cx = tx; cy = ty; place(); cursor.style.opacity = 1; }
+      if (!running) { running = true; last = performance.now(); requestAnimationFrame(loop); }
+    }, { passive: true });
     document.addEventListener('pointerover', (e) => {
       const labelled = e.target.closest('[data-cursor]');
       const link = e.target.closest('a, button, label, summary');
@@ -206,7 +215,7 @@
       dot.textContent = labelled ? labelled.dataset.cursor : '';
     });
     document.addEventListener('pointerleave', () => cursor.style.opacity = 0);
-    document.addEventListener('pointerenter', () => cursor.style.opacity = 1);
+    document.addEventListener('pointerenter', () => { if (seen) cursor.style.opacity = 1; });
   }
 
   /* ---------- vyhledávání domén (dlaždice Kompletní servis) ---------- */
