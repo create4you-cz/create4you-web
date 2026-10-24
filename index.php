@@ -13,6 +13,27 @@ $avg = $realReviews ? array_sum(array_column($realReviews, 'rating')) / count($r
 $years = setting('stat_years') ?: (string) (date('Y') - 2019);
 $priceTpl = setting('price_template');
 $usedCats = array_unique(array_column($projects, 'category'));
+// Weby do úvodní ukázky: nejdřív reference se screenshotem, pak weby na míru
+$showcase = $projects;
+usort($showcase, fn ($a, $b) => [(int) !$a['cover'], (int) ($a['category'] !== 'web')] <=> [(int) !$b['cover'], (int) ($b['category'] !== 'web')]);
+$showcase = array_slice($showcase, 0, 4);
+
+// Ukázky šablonových webů (fotky: assets/img/photos/tpl-<styl>.webp)
+$templates = [
+    'remeslo' => ['label' => 'Řemeslo', 'logo' => 'Novák', 'logoSub' => 'stavby', 'url' => 'novak-stavby', 'kicker' => 'Ostrava a okolí', 'title' => 'Rekonstrukce, na které se můžete spolehnout', 'sub' => 'Bytová jádra, koupelny a kompletní rekonstrukce. Pevná cena a termín ve smlouvě.', 'btn' => 'Nezávazná poptávka', 'nav' => ['Služby', 'Realizace', 'Ceník'], 'badge' => '4,9 ★ Google · 86 recenzí',
+                    'cards' => [['Koupelny', 'Na klíč do 3 týdnů'], ['Bytová jádra', 'Bez stěhování nábytku'], ['Podlahy', 'Vinyl, dřevo, dlažba']]],
+    'sluzby'  => ['label' => 'Služby & kancelář', 'logo' => 'Účetní', 'logoSub' => 'Plus', 'url' => 'ucetniplus', 'kicker' => 'Účetnictví & daně', 'title' => 'Starosti s papíry nechte na nás', 'sub' => 'Vedení účetnictví, mzdy a daňová přiznání pro OSVČ i firmy. Online, bez běhání po úřadech.', 'btn' => 'Domluvit schůzku', 'nav' => ['Služby', 'O nás', 'Ceník'], 'badge' => '120+ spokojených klientů',
+                    'cards' => [['Účetnictví', 'Od 1 900 Kč / měsíc'], ['Mzdy', 'Včetně ČSSZ a ZP'], ['Daně', 'Přiznání bez stresu']]],
+    'gastro'  => ['label' => 'Kavárna & gastro', 'logo' => 'Café', 'logoSub' => 'Lumen', 'url' => 'cafelumen', 'kicker' => 'Výběrová káva · Ostrava', 'title' => 'Místo, kam se rádi vracíte', 'sub' => 'Snídaně celý den, domácí dorty a káva z lokální pražírny. Otevřeno denně od 7:30.', 'btn' => 'Rezervovat stůl', 'nav' => ['Menu', 'Galerie', 'Rezervace'], 'badge' => 'Dnes otevřeno do 20:00',
+                    'cards' => [['Snídaně', 'Celý den'], ['Dorty', 'Pečeme každé ráno'], ['Káva', 'Lokální pražírna']]],
+    'beauty'  => ['label' => 'Beauty & zdraví', 'logo' => 'Studio', 'logoSub' => 'Aura', 'url' => 'studioaura', 'kicker' => 'Kosmetika & wellness', 'title' => 'Péče, kterou si zasloužíte', 'sub' => 'Ošetření pleti, masáže a manikúra v klidném prostředí centra města.', 'btn' => 'Objednat termín', 'nav' => ['Ošetření', 'Ceník', 'Dárkové poukazy'], 'badge' => 'Volný termín: zítra 14:00',
+                    'cards' => [['Ošetření pleti', 'od 890 Kč'], ['Masáže', 'od 690 Kč'], ['Manikúra', 'od 450 Kč']]],
+];
+foreach ($templates as $k => &$t) {
+    $t['photo'] = photo_url('tpl-' . $k);
+}
+unset($t);
+$tpl0 = reset($templates);
 
 site_head(
     'create4you – weby, aplikace a e-shopy na míru | Web do 48 hodin',
@@ -51,33 +72,23 @@ site_nav();
         <a class="btn btn-ghost btn-lg magnetic" href="#reference"><span>Ukázat reference</span></a>
       </div>
       <ul class="proof reveal">
-        <li><b><?= number_format($avg, 1, ',', '') ?></b> <?= stars($avg) ?><small>hodnocení klientů</small></li>
+        <li><b><?= number_format($avg, 1, ',', '') ?> <?= stars($avg) ?></b><small>hodnocení klientů</small></li>
         <li><b><span><span data-count="<?= (int) setting('stat_projects') ?>">0</span>+</span></b><small>dokončených projektů</small></li>
         <li><b><span data-count="<?= (int) $years ?>">0</span> let</b><small>zkušeností</small></li>
       </ul>
     </div>
 
     <div class="hero-visual" data-tilt-group aria-hidden="true">
-      <div class="float f-dash tilt">
-        <div class="fd-head"><span>Přehled zakázek</span><em>Živě</em></div>
-        <div class="fd-kpis">
-          <div><small>Tržby</small><b>248 600 Kč</b><i class="up">+18 %</i></div>
-          <div><small>Zakázky</small><b>34</b><i class="up">+6</i></div>
-        </div>
-        <svg class="fd-chart" viewBox="0 0 300 90" preserveAspectRatio="none">
-          <defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="currentColor" stop-opacity=".35"/><stop offset="1" stop-color="currentColor" stop-opacity="0"/></linearGradient></defs>
-          <path class="area" d="M0 80 C40 70 60 40 100 48 S160 20 200 30 S260 6 300 10 V90 H0Z" fill="url(#g1)"/>
-          <path class="stroke" d="M0 80 C40 70 60 40 100 48 S160 20 200 30 S260 6 300 10" fill="none" stroke="currentColor" stroke-width="3"/>
-        </svg>
-        <div class="fd-table">
-          <div><em style="--c:#4f8bff">NS</em><span><b>Novák stavby</b><small>Web + e-maily</small></span><strong>38 000 Kč</strong><i class="chip ok">Hotovo</i></div>
-          <div><em style="--c:#2fd6a3">ÚB</em><span><b>Účetní Bílá</b><small>CRM pro kancelář</small></span><strong>126 000 Kč</strong><i class="chip run">Vývoj</i></div>
-          <div><em style="--c:#ff7a2f">KM</em><span><b>Kavárna U Mlýna</b><small>Web do 48 h</small></span><strong>700 Kč/m</strong><i class="chip new">Nová</i></div>
-        </div>
+      <div class="hv-stage tilt">
+        <?php foreach ($showcase as $i => $p): ?>
+          <div class="hv-slide <?= $i === 0 ? 'on' : '' ?>" data-caption="<?= e($p['title']) ?>"><?= project_visual($p, 'hero-dev') ?></div>
+        <?php endforeach; ?>
       </div>
       <div class="float f-pay tilt"><span class="ok-ic">✓</span><div><b>Platba přijata</b><small>Faktura 2026-118 · 12 400 Kč</small></div></div>
-      <div class="float f-lead tilt"><span class="av">JK</span><div><b>Nová poptávka</b><small>„Potřebujeme e-shop na Shoptetu…“</small></div><i>teď</i></div>
+      <div class="float f-speed tilt"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.5" fill="none" stroke="currentColor" stroke-opacity=".15" stroke-width="3"/><circle class="ring" cx="18" cy="18" r="15.5" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="97.4" stroke-dashoffset="2" stroke-linecap="round" transform="rotate(-90 18 18)"/></svg><div><b>98</b><small>PageSpeed<br>na mobilu</small></div></div>
+      <div class="float f-lead tilt"><span class="av">JK</span><div><b>Nová poptávka z webu</b><small>„Potřebujeme e-shop na Shoptetu…“</small></div><i>teď</i></div>
       <div class="float f-48 tilt"><b>48 h</b><small>od objednávky<br>po spuštění</small></div>
+      <div class="hv-dots"><?php foreach ($showcase as $i => $p): ?><button type="button" class="<?= $i === 0 ? 'on' : '' ?>" aria-label="<?= e($p['title']) ?>"></button><?php endforeach; ?></div>
     </div>
   </div>
   <a class="scroll-hint" href="#sluzby" aria-label="Pokračovat dolů"><span></span></a>
@@ -110,17 +121,25 @@ site_nav();
         <h3>Weby na míru</h3>
         <p>Firemní prezentace s vlastním designem, rychlým načítáním a administrací, ve které si obsah upravíte sami. Včetně zřízení e-mailů, domény a komunikace.</p>
         <ul class="chips"><li>Design na míru</li><li>Administrace</li><li>SEO</li><li>E-maily</li><li>Hosting</li></ul>
+        <?php $realWeb = current(array_filter($projects, fn ($p) => $p['cover'] && $p['category'] === 'web')); ?>
+        <?php if ($realWeb): ?>
+        <a class="t-mock site-mock real" href="reference.php?slug=<?= e($realWeb['slug']) ?>" data-cursor="Detail">
+          <div class="wm-bar"><i></i><i></i><i></i><span><?= e(preg_replace('~^https?://(www\.)?~', '', rtrim($realWeb['url'], '/')) ?: $realWeb['title']) ?></span></div>
+          <div class="scroller"><img src="<?= e(upload_url($realWeb['cover'])) ?>" alt="<?= e($realWeb['title']) ?>" loading="lazy"></div>
+        </a>
+        <?php else: ?>
         <div class="t-mock site-mock" aria-hidden="true">
           <div class="wm-bar"><i></i><i></i><i></i><span>www.horak-montaze.cz</span></div>
           <div class="sm-scroll">
             <div class="sm-page">
               <div class="sm-nav"><b>HORÁK<span>montáže</span></b><i>Služby</i><i>Realizace</i><i>Kontakt</i><em>Poptávka</em></div>
-              <div class="sm-hero"><div><small>Ocelové konstrukce · Ostrava</small><h5>Svařujeme, montujeme, dodáváme včas.</h5><span class="sm-btn">Nezávazná poptávka →</span></div><div class="sm-photo"><i></i><i></i><i></i></div></div>
+              <div class="sm-hero"><div><small>Ocelové konstrukce · Ostrava</small><h5>Svařujeme, montujeme, dodáváme včas.</h5><span class="sm-btn">Nezávazná poptávka →</span></div><div class="sm-photo" <?= photo_url('web-montaze') ? 'style="background-image:url(' . e(photo_url('web-montaze')) . ')"' : '' ?>><span>Hala Vítkovice · 2026</span></div></div>
               <div class="sm-stats"><div><b>320+</b><small>zakázek</small></div><div><b>15 let</b><small>praxe</small></div><div><b>24 h</b><small>reakce</small></div></div>
               <div class="sm-cards"><div><span>🔩</span><b>Ocelové konstrukce</b><small>Haly, přístřešky, schodiště</small></div><div><span>🔥</span><b>Svařování MIG/TIG</b><small>Certifikovaní svářeči</small></div><div><span>🏗️</span><b>Montáže na stavbě</b><small>Celá ČR a SK</small></div></div>
               <div class="sm-review">★★★★★ <span>„Konstrukce hotová o týden dřív, než jsme čekali.“</span></div>
               <div class="sm-foot"><b>Napište nám</b><span>info@horak-montaze.cz</span></div>
             </div>
+        <?php endif; ?>
           </div>
         </div>
       </article>
@@ -224,25 +243,24 @@ site_nav();
     <div class="tpl-layout">
       <div class="tpl-demo reveal">
         <div class="tpl-tabs" role="tablist">
-          <button class="on" data-tpl="remeslo" role="tab">Řemeslo</button>
-          <button data-tpl="sluzby" role="tab">Služby &amp; kancelář</button>
-          <button data-tpl="gastro" role="tab">Kavárna &amp; gastro</button>
-          <button data-tpl="beauty" role="tab">Beauty &amp; zdraví</button>
+          <?php $i = 0; foreach ($templates as $k => $t): ?><button class="<?= $i++ === 0 ? 'on' : '' ?>" data-tpl="<?= $k ?>" role="tab"><?= e($t['label']) ?></button><?php endforeach; ?>
         </div>
-        <div class="tpl-frame" data-style="remeslo">
-          <div class="tf-bar"><i></i><i></i><i></i><span class="tf-url">www.<b>vasefirma</b>.cz</span></div>
+        <div class="tpl-frame" data-style="remeslo" data-templates="<?= e(json_encode($templates, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) ?>">
+          <div class="tf-bar"><i></i><i></i><i></i><span class="tf-url">www.<b><?= e($tpl0['url']) ?></b>.cz</span></div>
           <div class="tf-page">
-            <div class="tf-nav"><b class="tf-logo">Novák</b><span></span><span></span><span></span><em>Kontakt</em></div>
+            <div class="tf-nav"><b class="tf-logo"><span class="tf-logo-a"><?= e($tpl0['logo']) ?></span><span class="tf-logo-b"><?= e($tpl0['logoSub']) ?></span></b><span class="tf-links"><?php foreach ($tpl0['nav'] as $n): ?><span><?= e($n) ?></span><?php endforeach; ?></span><em>Kontakt</em></div>
             <div class="tf-hero">
               <div>
-                <small class="tf-kicker">Ostrava a okolí</small>
-                <h4 class="tf-title">Kvalitní práce, na kterou se můžete spolehnout</h4>
-                <p class="tf-sub">Rychlé termíny, férové ceny a záruka na každou zakázku.</p>
-                <span class="tf-btn">Nezávazná poptávka</span>
+                <small class="tf-kicker"><?= e($tpl0['kicker']) ?></small>
+                <h4 class="tf-title"><?= e($tpl0['title']) ?></h4>
+                <p class="tf-sub"><?= e($tpl0['sub']) ?></p>
+                <span class="tf-btn"><?= e($tpl0['btn']) ?></span><span class="tf-btn2">+420 777 123 456</span>
               </div>
-              <div class="tf-img"></div>
+              <div class="tf-img <?= $tpl0['photo'] ? 'has-photo' : '' ?>" <?= $tpl0['photo'] ? 'style="background-image:url(' . e($tpl0['photo']) . ')"' : '' ?>>
+                <span class="tf-badge"><?= e($tpl0['badge']) ?></span>
+              </div>
             </div>
-            <div class="tf-cards"><i></i><i></i><i></i></div>
+            <div class="tf-cards"><?php foreach ($tpl0['cards'] as $i => [$ct, $cs]): ?><div><span class="tf-ci"><?= $i + 1 ?></span><b><?= e($ct) ?></b><small><?= e($cs) ?></small></div><?php endforeach; ?></div>
           </div>
         </div>
         <p class="tpl-note">Interaktivní ukázka – barvy, písma i rozložení vždy přizpůsobíme vaší značce.</p>

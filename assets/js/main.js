@@ -251,28 +251,48 @@
 
   /* ---------- ukázka šablon ---------- */
   const frame = $('.tpl-frame');
-  const tplData = {
-    remeslo: { logo: 'Novák', kicker: 'Ostrava a okolí', title: 'Kvalitní práce, na kterou se můžete spolehnout', sub: 'Rychlé termíny, férové ceny a záruka na každou zakázku.', btn: 'Nezávazná poptávka', url: 'novak-remesla' },
-    sluzby: { logo: 'Účetní Plus', kicker: 'Účetnictví & daně', title: 'Starosti s papíry nechte na nás', sub: 'Vedení účetnictví, mzdy a daňová přiznání pro OSVČ i firmy.', btn: 'Domluvit schůzku', url: 'ucetniplus' },
-    gastro: { logo: 'Café Lumen', kicker: 'Výběrová káva', title: 'Místo, kam se rádi vracíte', sub: 'Snídaně celý den, domácí dorty a káva z lokální pražírny.', btn: 'Rezervovat stůl', url: 'cafelumen' },
-    beauty: { logo: 'Studio Aura', kicker: 'Kosmetika & wellness', title: 'Péče, kterou si zasloužíte', sub: 'Ošetření pleti, masáže a manikúra v klidném prostředí.', btn: 'Objednat termín', url: 'studioaura' },
-  };
+  const tplData = frame ? JSON.parse(frame.dataset.templates || '{}') : {};
   $$('.tpl-tabs button').forEach((btn) => btn.addEventListener('click', () => {
     const d = tplData[btn.dataset.tpl];
     if (!d || !frame) return;
     $$('.tpl-tabs button').forEach((b) => b.classList.toggle('on', b === btn));
     frame.dataset.style = btn.dataset.tpl;
-    $('.tf-logo', frame).textContent = d.logo;
+    $('.tf-logo-a', frame).textContent = d.logo;
+    $('.tf-logo-b', frame).textContent = d.logoSub;
+    $('.tf-links', frame).innerHTML = d.nav.map((n) => `<span>${n}</span>`).join('');
     $('.tf-kicker', frame).textContent = d.kicker;
     $('.tf-title', frame).textContent = d.title;
     $('.tf-sub', frame).textContent = d.sub;
     $('.tf-btn', frame).textContent = d.btn;
     $('.tf-url b', frame).textContent = d.url;
-    const hero = $('.tf-hero', frame);
-    hero.classList.remove('tf-swap');
-    void hero.offsetWidth;
-    hero.classList.add('tf-swap');
+    $('.tf-badge', frame).textContent = d.badge;
+    const img = $('.tf-img', frame);
+    img.classList.toggle('has-photo', !!d.photo);
+    img.style.backgroundImage = d.photo ? `url(${d.photo})` : '';
+    $('.tf-cards', frame).innerHTML = d.cards.map(([t, s], i) => `<div><span class="tf-ci">${i + 1}</span><b>${t}</b><small>${s}</small></div>`).join('');
+    const page = $('.tf-page', frame);
+    page.classList.remove('tf-swap');
+    void page.offsetWidth;
+    page.classList.add('tf-swap');
   }));
+
+  /* ---------- weby v úvodu (střídání referencí) ---------- */
+  const slides = $$('.hv-slide');
+  const dots = $$('.hv-dots button');
+  if (slides.length > 1) {
+    let cur = 0;
+    let timer = null;
+    const go = (i) => {
+      slides[cur].classList.remove('on');
+      dots[cur]?.classList.remove('on');
+      cur = (i + slides.length) % slides.length;
+      slides[cur].classList.add('on');
+      dots[cur]?.classList.add('on');
+    };
+    const start = () => { if (!reduced) timer = setInterval(() => go(cur + 1), 5200); };
+    dots.forEach((d, i) => d.addEventListener('click', () => { clearInterval(timer); go(i); start(); }));
+    start();
+  }
 
   /* ---------- předvyplnění formuláře z ceníku ---------- */
   $$('[data-pick]').forEach((a) => a.addEventListener('click', () => {

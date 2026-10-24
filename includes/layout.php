@@ -133,12 +133,25 @@ function project_visual(array $p, string $class = ''): string
                 . '<strong>' . e($p['title']) . '</strong>'
                 . '<span class="poster-tags">' . implode('', array_map(fn ($t) => '<i>' . e($t) . '</i>', $tags)) . '</span></div>';
     }
-    $phone = $mob ? $screen($mob, $p['title'] . ' – mobil') : ($desk ? $screen($desk, '') : '<div class="poster small"><strong>' . e($p['title']) . '</strong></div>');
+    // Telefon jen se skutečným mobilním screenshotem (nebo s plakátem, když screenshot není vůbec)
+    $phone = $mob ? $screen($mob, $p['title'] . ' – mobil') : ($desk ? '' : '<div class="poster small"><strong>' . e($p['title']) . '</strong></div>');
 
-    return '<div class="devices ' . $class . '" style="--accent:' . e($p['accent']) . '">'
+    return '<div class="devices ' . ($phone ? '' : 'no-phone ') . $class . '" style="--accent:' . e($p['accent']) . '">'
          . '<div class="laptop"><div class="lp-screen"><div class="lp-bar"><i></i><i></i><i></i>' . ($host ? '<span>' . e($host) . '</span>' : '') . '</div>' . $laptop . '</div><div class="lp-base"></div></div>'
-         . '<div class="phone"><div class="ph-screen">' . $phone . '</div></div>'
+         . ($phone ? '<div class="phone"><div class="ph-screen">' . $phone . '</div></div>' : '')
          . '</div>';
+}
+
+/** Fotka z assets/img/photos/<název>.(webp|jpg|png), nebo prázdný řetězec, pokud zatím chybí. */
+function photo_url(string $name): string
+{
+    foreach (['webp', 'jpg', 'jpeg', 'png'] as $ext) {
+        $f = "assets/img/photos/$name.$ext";
+        if (is_file(__DIR__ . '/../' . $f)) {
+            return $f;
+        }
+    }
+    return '';
 }
 
 function stars(float $rating): string
