@@ -8,7 +8,8 @@
 
   /* ---------- téma ---------- */
   $('.theme-toggle')?.addEventListener('click', () => {
-    const next = root.dataset.theme === 'light' ? 'dark' : 'light';
+    const current = root.dataset.theme || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    const next = current === 'light' ? 'dark' : 'light';
     const apply = () => {
       root.dataset.theme = next;
       try { localStorage.setItem('theme', next); } catch (e) {}
