@@ -89,7 +89,7 @@ function seed(PDO $pdo): void
 
     // Další screenshoty do galerií
     $gallery = [
-        'accuwise' => [['accuwise-kr.webp', 'Korejská jazyková verze pro korejské firmy v ČR a SR'], ['accuwise-cz.webp', 'Česká verze – úvodní stránka']],
+        'accuwise' => [['accuwise-kr.webp', 'Korejská jazyková verze pro korejské firmy v ČR a SR']],
     ];
     $gi = $pdo->prepare('INSERT INTO project_images(project_id, file, caption, sort) SELECT id, ?, ?, ? FROM projects WHERE slug = ?');
     foreach ($gallery as $slug => $imgs) {

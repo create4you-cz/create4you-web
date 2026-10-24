@@ -911,4 +911,4 @@ body::before {
 
 /* telefon: screenshot vždy na celou šířku displeje (neořezávat boky) */
 .phone { aspect-ratio: 9 / 18; }
-.ph-screen .scroller img { min-height: 0; }
+.ph-screen .scroller img { min-height: 100%; object-position: top center; }

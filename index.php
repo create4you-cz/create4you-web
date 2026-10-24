@@ -15,7 +15,8 @@ $priceTpl = setting('price_template');
 $usedCats = array_unique(array_column($projects, 'category'));
 // Weby do úvodní ukázky: nejdřív reference se screenshotem, pak weby na míru
 $showcase = $projects;
-usort($showcase, fn ($a, $b) => [(int) !$a['cover'], (int) ($a['category'] !== 'web')] <=> [(int) !$b['cover'], (int) ($b['category'] !== 'web')]);
+$isWeb = fn ($p) => in_array($p['category'], ['web', 'sablona'], true);
+usort($showcase, fn ($a, $b) => [(int) !$a['cover'], (int) !$isWeb($a)] <=> [(int) !$b['cover'], (int) !$isWeb($b)]);
 $showcase = array_slice($showcase, 0, 4);
 
 // Ukázky šablonových webů (fotky: assets/img/photos/tpl-<styl>.webp)
