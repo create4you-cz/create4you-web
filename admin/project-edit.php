@@ -8,7 +8,7 @@ $id = (int) ($_GET['id'] ?? $_POST['id'] ?? 0);
 $p = [
     'id' => 0, 'title' => '', 'slug' => '', 'category' => 'web', 'client' => '', 'url' => '', 'year' => date('Y'),
     'status' => 'done', 'excerpt' => '', 'body' => '', 'tags' => '', 'accent' => '#7c5cff', 'cover' => '',
-    'featured' => 0, 'visible' => 1,
+    'featured' => 0, 'visible' => 1, 'cover_mobile' => '',
 ];
 if ($id) {
     $st = $pdo->prepare('SELECT * FROM projects WHERE id = ?');
@@ -60,16 +60,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 delete_upload($p['cover']);
                 $p['cover'] = $newCover ?? '';
             }
+            $newMob = isset($_FILES['cover_mobile']) ? save_uploaded_image($_FILES['cover_mobile']) : null;
+            if ($newMob || isset($_POST['remove_cover_mobile'])) {
+                delete_upload($p['cover_mobile']);
+                $p['cover_mobile'] = $newMob ?? '';
+            }
             $slug = unique_slug(slugify($_POST['slug'] ?: $p['title']), $id);
             $vals = [$slug, $p['title'], $p['category'], $p['client'], $p['url'], $p['year'], $p['status'], $p['excerpt'],
-                     $p['body'], $p['tags'], $p['accent'], $p['cover'], $p['featured'], $p['visible']];
+                     $p['body'], $p['tags'], $p['accent'], $p['cover'], $p['featured'], $p['visible'], $p['cover_mobile']];
             if ($id) {
                 $pdo->prepare('UPDATE projects SET slug=?, title=?, category=?, client=?, url=?, year=?, status=?, excerpt=?, body=?, tags=?,
-                               accent=?, cover=?, featured=?, visible=?, updated_at=CURRENT_TIMESTAMP WHERE id=?')
+                               accent=?, cover=?, featured=?, visible=?, cover_mobile=?, updated_at=CURRENT_TIMESTAMP WHERE id=?')
                     ->execute([...$vals, $id]);
             } else {
-                $pdo->prepare('INSERT INTO projects(slug, title, category, client, url, year, status, excerpt, body, tags, accent, cover, featured, visible, sort)
-                               VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?, (SELECT COALESCE(MIN(sort), 0) - 1 FROM projects))')
+                $pdo->prepare('INSERT INTO projects(slug, title, category, client, url, year, status, excerpt, body, tags, accent, cover, featured, visible, cover_mobile, sort)
+                               VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, (SELECT COALESCE(MIN(sort), 0) - 1 FROM projects))')
                     ->execute($vals);
                 $id = (int) $pdo->lastInsertId();
             }
@@ -157,16 +162,28 @@ admin_header($id ? 'Upravit referenci' : 'Nová reference', 'projects.php');
       <?php if ($id && $p['visible']): ?><a class="btn wide" target="_blank" href="../reference.php?slug=<?= e($p['slug']) ?>">↗ Zobrazit na webu</a><?php endif; ?>
     </div>
     <div class="card">
-      <h2>Titulní fotka</h2>
+      <h2>Screenshot – počítač</h2>
       <?php if ($p['cover']): ?>
         <img class="cover-prev" src="../<?= e(upload_url($p['cover'])) ?>" alt="">
-        <label class="check"><input type="checkbox" name="remove_cover"> Odstranit titulní fotku</label>
+        <label class="check"><input type="checkbox" name="remove_cover"> Odstranit screenshot</label>
       <?php endif; ?>
       <label class="drop small">
         <input type="file" name="cover" accept="image/*" data-preview="cover-prev">
-        <span><?= $p['cover'] ? 'Nahrát jinou' : 'Nahrát titulní fotku' ?><br><small>ideálně screenshot 1600×1000</small></span>
+        <span><?= $p['cover'] ? 'Nahrát jiný' : 'Nahrát screenshot' ?><br><small>ideálně celá stránka, šířka 1440 px – na webu se při najetí roluje</small></span>
       </label>
       <div class="previews" id="cover-prev"></div>
+    </div>
+    <div class="card">
+      <h2>Screenshot – mobil</h2>
+      <?php if ($p['cover_mobile']): ?>
+        <img class="cover-prev mobile" src="../<?= e(upload_url($p['cover_mobile'])) ?>" alt="">
+        <label class="check"><input type="checkbox" name="remove_cover_mobile"> Odstranit</label>
+      <?php endif; ?>
+      <label class="drop small">
+        <input type="file" name="cover_mobile" accept="image/*" data-preview="mob-prev">
+        <span><?= $p['cover_mobile'] ? 'Nahrát jiný' : 'Nahrát mobilní screenshot' ?><br><small>šířka 390 px, zobrazí se v telefonu</small></span>
+      </label>
+      <div class="previews" id="mob-prev"></div>
     </div>
   </div>
 </form>

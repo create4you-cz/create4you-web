@@ -144,3 +144,4 @@ body.auth { min-height: 100vh; display: grid; place-items: center; padding: 20px
   .table tr { display: block; border-bottom: 1px solid var(--border); padding: 10px 0; }
   .table .actions { justify-content: flex-start; }
 }
+.cover-prev.mobile { max-width: 140px; }

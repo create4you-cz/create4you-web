@@ -47,6 +47,16 @@ location ~ ^/uploads/.*\.(php|phtml|phar)$ { deny all; }
 
 Nahrané obrázky se automaticky zmenší (max. 2000 px) a převedou do WebP.
 
+## Screenshoty referencí
+Reference se zobrazují v rámečku notebooku a telefonu; screenshot celé stránky se při najetí myší sám roluje.
+Screenshoty lze nahrát ručně v administraci (počítač + mobil), nebo je pořídit automaticky ze zadaných odkazů:
+
+```bash
+npm i playwright && npx playwright install chromium
+php tools/screenshots.php          # reference, které ještě screenshot nemají
+php tools/screenshots.php --all    # přefotit všechny
+```
+
 ## Bezpečnost
 - hesla hashovaná (`password_hash`), ochrana proti hádání hesla (8 pokusů / 15 min)
 - CSRF tokeny na všech formulářích, výstupy escapované

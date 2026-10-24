@@ -37,7 +37,7 @@ function site_head(string $title, string $description, string $canonical = '', s
 function site_nav(bool $home = true): void
 {
     $p = $home ? '' : './';
-    $links = ['sluzby' => 'Služby', 'reference' => 'Reference', 'sablony' => 'Web do 48 h', 'eshopy' => 'E-shopy', 'cenik' => 'Ceník', 'hodnoceni' => 'Hodnocení'];
+    $links = ['sluzby' => 'Služby', 'ukazky' => 'Ukázky', 'reference' => 'Reference', 'sablony' => 'Web do 48 h', 'eshopy' => 'E-shopy', 'cenik' => 'Ceník'];
     ?>
 <header class="nav" id="top">
   <div class="wrap nav-in">
@@ -107,27 +107,38 @@ function site_footer(): void
   </div>
 </footer>
 <script src="assets/js/main.js?v=<?= filemtime(__DIR__ . '/../assets/js/main.js') ?>" defer></script>
+<script src="assets/js/demos.js?v=<?= filemtime(__DIR__ . '/../assets/js/demos.js') ?>" defer></script>
 </body>
 </html>
 <?php
 }
 
-/** Náhled projektu: nahraná titulní fotka, nebo vygenerovaný „mockup“ v barvě projektu. */
+/**
+ * Náhled projektu v rámečku notebooku a telefonu.
+ * Se screenshotem: obrázek se při najetí myší roluje (ideální je screenshot celé stránky).
+ * Bez screenshotu: typografický plakát v barvách projektu.
+ */
 function project_visual(array $p, string $class = ''): string
 {
-    if ($p['cover']) {
-        return '<img class="pv-img ' . $class . '" src="' . e(upload_url($p['cover'])) . '" alt="' . e($p['title']) . '" loading="lazy">';
+    $host = $p['url'] ? preg_replace('~^https?://(www\.)?~', '', rtrim($p['url'], '/')) : '';
+    $desk = $p['cover'] ?? '';
+    $mob  = $p['cover_mobile'] ?? '';
+    $screen = static fn (string $file, string $alt) => '<div class="scroller"><img src="' . e(upload_url($file)) . '" alt="' . e($alt) . '" loading="lazy"></div>';
+
+    if ($desk) {
+        $laptop = $screen($desk, $p['title'] . ' – počítač');
+    } else {
+        $tags = array_slice(array_filter(array_map('trim', explode(',', $p['tags']))), 0, 3);
+        $laptop = '<div class="poster"><span class="poster-cat">' . e(CATEGORIES[$p['category']] ?? '') . '</span>'
+                . '<strong>' . e($p['title']) . '</strong>'
+                . '<span class="poster-tags">' . implode('', array_map(fn ($t) => '<i>' . e($t) . '</i>', $tags)) . '</span></div>';
     }
-    $host = $p['url'] ? preg_replace('~^https?://(www\.)?~', '', rtrim($p['url'], '/')) : slugify($p['title']) . '.cz';
-    $ui = match ($p['category']) {
-        'app' => '<div class="pv-app"><aside><i></i><i></i><i></i><i></i></aside><div><div class="pv-kpis"><b></b><b></b><b></b></div>'
-               . '<svg viewBox="0 0 200 60" preserveAspectRatio="none"><path d="M0 50 C30 45 40 20 70 28 S120 10 140 22 S180 8 200 4" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>'
-               . '<div class="pv-rows"><i></i><i></i><i></i></div></div></div>',
-        'eshop' => '<div class="pv-shop"><i></i><i></i><i></i><i></i><i></i><i></i></div>',
-        default => '<div class="pv-web"><span class="pv-kicker"></span><strong>' . e($p['title']) . '</strong><span class="pv-line"></span><span class="pv-line short"></span><span class="pv-btn"></span></div>',
-    };
-    return '<div class="pv ' . $class . '" style="--accent:' . e($p['accent']) . '" role="img" aria-label="' . e($p['title']) . '">'
-         . '<div class="pv-bar"><i></i><i></i><i></i><span>' . e($host) . '</span></div>' . $ui . '</div>';
+    $phone = $mob ? $screen($mob, $p['title'] . ' – mobil') : ($desk ? $screen($desk, '') : '<div class="poster small"><strong>' . e($p['title']) . '</strong></div>');
+
+    return '<div class="devices ' . $class . '" style="--accent:' . e($p['accent']) . '">'
+         . '<div class="laptop"><div class="lp-screen"><div class="lp-bar"><i></i><i></i><i></i>' . ($host ? '<span>' . e($host) . '</span>' : '') . '</div>' . $laptop . '</div><div class="lp-base"></div></div>'
+         . '<div class="phone"><div class="ph-screen">' . $phone . '</div></div>'
+         . '</div>';
 }
 
 function stars(float $rating): string

@@ -10,9 +10,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = (int) ($_POST['id'] ?? 0);
     $action = $_POST['action'] ?? '';
     if ($action === 'delete' && $id) {
-        $p = $pdo->prepare('SELECT cover FROM projects WHERE id = ?');
+        $p = $pdo->prepare('SELECT cover, cover_mobile FROM projects WHERE id = ?');
         $p->execute([$id]);
-        delete_upload((string) $p->fetchColumn());
+        foreach ((array) $p->fetch() as $f) {
+            delete_upload((string) $f);
+        }
         $imgs = $pdo->prepare('SELECT file FROM project_images WHERE project_id = ?');
         $imgs->execute([$id]);
         foreach ($imgs->fetchAll(PDO::FETCH_COLUMN) as $f) {

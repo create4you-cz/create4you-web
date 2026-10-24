@@ -101,4 +101,10 @@ function migrate(PDO $pdo): void
         at INTEGER NOT NULL
     );
     SQL);
+
+    // Dodatečné sloupce pro starší databáze
+    $cols = array_column($pdo->query('PRAGMA table_info(projects)')->fetchAll(), 'name');
+    if (!in_array('cover_mobile', $cols, true)) {
+        $pdo->exec("ALTER TABLE projects ADD COLUMN cover_mobile TEXT NOT NULL DEFAULT ''");
+    }
 }

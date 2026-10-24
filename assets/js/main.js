@@ -8,7 +8,7 @@
 
   /* ---------- téma ---------- */
   $('.theme-toggle')?.addEventListener('click', () => {
-    const current = root.dataset.theme || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    const current = root.dataset.theme || 'dark';
     const next = current === 'light' ? 'dark' : 'light';
     const apply = () => {
       root.dataset.theme = next;
@@ -207,6 +207,28 @@
     });
     document.addEventListener('pointerleave', () => cursor.style.opacity = 0);
     document.addEventListener('pointerenter', () => cursor.style.opacity = 1);
+  }
+
+  /* ---------- vyhledávání domén (dlaždice Kompletní servis) ---------- */
+  const dm = $('.domain');
+  if (dm) {
+    const out = $('.dm-type', dm);
+    const names = out.dataset.domains.split(',');
+    if (reduced) { out.textContent = names[0]; dm.classList.add('found'); }
+    else {
+      let n = 0;
+      const typeName = async () => {
+        const name = names[n++ % names.length];
+        for (let i = 1; i <= name.length; i++) { out.textContent = name.slice(0, i); await new Promise((r) => setTimeout(r, 90)); }
+        dm.classList.add('found');
+        await new Promise((r) => setTimeout(r, 2600));
+        dm.classList.remove('found');
+        for (let i = name.length; i >= 0; i--) { out.textContent = name.slice(0, i); await new Promise((r) => setTimeout(r, 35)); }
+        setTimeout(typeName, 400);
+      };
+      const dio = new IntersectionObserver(([en]) => { if (en.isIntersecting) { dio.disconnect(); typeName(); } });
+      dio.observe(dm);
+    }
   }
 
   /* ---------- filtr referencí ---------- */

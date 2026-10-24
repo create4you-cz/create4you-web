@@ -69,10 +69,14 @@ site_nav();
           <path class="area" d="M0 80 C40 70 60 40 100 48 S160 20 200 30 S260 6 300 10 V90 H0Z" fill="url(#g1)"/>
           <path class="stroke" d="M0 80 C40 70 60 40 100 48 S160 20 200 30 S260 6 300 10" fill="none" stroke="currentColor" stroke-width="3"/>
         </svg>
-        <div class="fd-rows"><span><i style="--w:82%"></i>Montáž – Ostrava</span><span><i style="--w:56%"></i>Web + e-maily</span><span><i style="--w:34%"></i>Údržba CRM</span></div>
+        <div class="fd-table">
+          <div><em style="--c:#4f8bff">NS</em><span><b>Novák stavby</b><small>Web + e-maily</small></span><strong>38 000 Kč</strong><i class="chip ok">Hotovo</i></div>
+          <div><em style="--c:#2fd6a3">ÚB</em><span><b>Účetní Bílá</b><small>CRM pro kancelář</small></span><strong>126 000 Kč</strong><i class="chip run">Vývoj</i></div>
+          <div><em style="--c:#ff7a2f">KM</em><span><b>Kavárna U Mlýna</b><small>Web do 48 h</small></span><strong>700 Kč/m</strong><i class="chip new">Nová</i></div>
+        </div>
       </div>
-      <div class="float f-pay tilt"><span class="ok">✓</span><div><b>Platba přijata</b><small>Faktura 2026-118 · 12 400 Kč</small></div></div>
-      <div class="float f-mail tilt"><span class="ic">@</span><div><b>info@vasefirma.cz</b><small>E-mail nastaven a připraven</small></div></div>
+      <div class="float f-pay tilt"><span class="ok-ic">✓</span><div><b>Platba přijata</b><small>Faktura 2026-118 · 12 400 Kč</small></div></div>
+      <div class="float f-lead tilt"><span class="av">JK</span><div><b>Nová poptávka</b><small>„Potřebujeme e-shop na Shoptetu…“</small></div><i>teď</i></div>
       <div class="float f-48 tilt"><b>48 h</b><small>od objednávky<br>po spuštění</small></div>
     </div>
   </div>
@@ -106,10 +110,18 @@ site_nav();
         <h3>Weby na míru</h3>
         <p>Firemní prezentace s vlastním designem, rychlým načítáním a administrací, ve které si obsah upravíte sami. Včetně zřízení e-mailů, domény a komunikace.</p>
         <ul class="chips"><li>Design na míru</li><li>Administrace</li><li>SEO</li><li>E-maily</li><li>Hosting</li></ul>
-        <div class="t-mock web-mock" aria-hidden="true">
-          <div class="wm-bar"><i></i><i></i><i></i></div>
-          <div class="wm-body"><b></b><span></span><span class="s"></span><em></em></div>
-          <div class="wm-cursor"></div>
+        <div class="t-mock site-mock" aria-hidden="true">
+          <div class="wm-bar"><i></i><i></i><i></i><span>www.horak-montaze.cz</span></div>
+          <div class="sm-scroll">
+            <div class="sm-page">
+              <div class="sm-nav"><b>HORÁK<span>montáže</span></b><i>Služby</i><i>Realizace</i><i>Kontakt</i><em>Poptávka</em></div>
+              <div class="sm-hero"><div><small>Ocelové konstrukce · Ostrava</small><h5>Svařujeme, montujeme, dodáváme včas.</h5><span class="sm-btn">Nezávazná poptávka →</span></div><div class="sm-photo"><i></i><i></i><i></i></div></div>
+              <div class="sm-stats"><div><b>320+</b><small>zakázek</small></div><div><b>15 let</b><small>praxe</small></div><div><b>24 h</b><small>reakce</small></div></div>
+              <div class="sm-cards"><div><span>🔩</span><b>Ocelové konstrukce</b><small>Haly, přístřešky, schodiště</small></div><div><span>🔥</span><b>Svařování MIG/TIG</b><small>Certifikovaní svářeči</small></div><div><span>🏗️</span><b>Montáže na stavbě</b><small>Celá ČR a SK</small></div></div>
+              <div class="sm-review">★★★★★ <span>„Konstrukce hotová o týden dřív, než jsme čekali.“</span></div>
+              <div class="sm-foot"><b>Napište nám</b><span>info@horak-montaze.cz</span></div>
+            </div>
+          </div>
         </div>
       </article>
 
@@ -117,10 +129,11 @@ site_nav();
         <div class="t-ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></div>
         <h3>Aplikace &amp; CRM na míru</h3>
         <p>Systémy pro řízení firem, CRM pro kanceláře, klientské portály, platby, fakturace, AI nástroje. Přesně podle toho, jak pracujete – ne naopak.</p>
-        <div class="kanban" aria-hidden="true">
-          <div><small>Nové</small><i></i><i></i></div>
-          <div><small>Řeší se</small><i class="hot"></i></div>
-          <div><small>Hotovo</small><i></i><i></i><i></i></div>
+        <div class="mini-app" aria-hidden="true">
+          <div class="ma-row"><em style="--c:#4f8bff">JN</em><span><b>Rekonstrukce bytu</b><small>Termín 12. 11.</small></span><i class="chip run">Probíhá</i></div>
+          <div class="ma-row hot"><em style="--c:#2fd6a3">PB</em><span><b>Daňové přiznání</b><small>Klient: Bílá</small></span><i class="chip new">Nové</i></div>
+          <div class="ma-row"><em style="--c:#ff7a2f">MH</em><span><b>Montáž haly B</b><small>Fakturováno</small></span><i class="chip ok">Hotovo</i></div>
+          <div class="ma-bar"><span>Vytížení týmu</span><i><b></b></i><strong>78 %</strong></div>
         </div>
       </article>
 
@@ -136,11 +149,20 @@ site_nav();
         <div class="t-ic"><svg viewBox="0 0 24 24"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/></svg></div>
         <h3>E-shopy</h3>
         <p>Na platformě <b>Shoptet</b> pro rychlý start, nebo plně <b>na míru</b> s napojením na sklad, účetnictví a dopravce.</p>
+        <div class="mini-shop" aria-hidden="true">
+          <div><i style="--c:#2f6df6"></i><b>Hrnek</b><small>490 Kč</small></div>
+          <div><i style="--c:#e0661b"></i><b>Miska</b><small>360 Kč</small></div>
+          <div><i style="--c:#2fae7a"></i><b>Váza</b><small>890 Kč</small></div>
+        </div>
         <a class="link-arrow" href="#eshopy">Porovnat možnosti <span>→</span></a>
       </article>
 
       <article class="tile t-care spot reveal">
         <h3>Kompletní servis</h3>
+        <div class="domain" aria-hidden="true">
+          <div class="dm-input"><span class="dm-type" data-domains="vasefirma,novak-stavby,kavarna-mlyn,studio-aura"></span><span class="dm-caret"></span></div>
+          <div class="dm-res"><span>.cz <b>✓ volná</b></span><span>.sk <b>✓ volná</b></span><span>.eu <b>✓ volná</b></span></div>
+        </div>
         <ul class="checks">
           <li>Registrace domén .cz .sk .eu</li>
           <li>Firemní e-maily a jejich nastavení</li>
@@ -153,12 +175,14 @@ site_nav();
   </div>
 </section>
 
+<?php require __DIR__ . '/includes/demos.php'; ?>
+
 <!-- ============ REFERENCE ============ -->
 <section class="section" id="reference">
   <div class="wrap">
     <div class="sec-head row reveal">
       <div>
-        <span class="kicker">02 — Reference</span>
+        <span class="kicker">03 — Reference</span>
         <h2>Na čem jsme <em>pracovali</em></h2>
       </div>
       <div class="filters" role="tablist" aria-label="Filtr referencí">
@@ -192,7 +216,7 @@ site_nav();
 <section class="section s-48" id="sablony">
   <div class="wrap">
     <div class="sec-head reveal">
-      <span class="kicker">03 — Web do 48 hodin</span>
+      <span class="kicker">04 — Web do 48 hodin</span>
       <h2>Profesionální web <em>bez vstupní investice</em></h2>
       <p>Pro živnostníky, řemeslníky, kanceláře a malé firmy. Vyberete styl, pošlete texty a fotky – my se postaráme o zbytek.</p>
     </div>
@@ -249,7 +273,7 @@ site_nav();
 <section class="section" id="eshopy">
   <div class="wrap">
     <div class="sec-head reveal">
-      <span class="kicker">04 — E-shopy</span>
+      <span class="kicker">05 — E-shopy</span>
       <h2>E-shop, který <em>prodává</em></h2>
       <p>Poradíme, která cesta dává smysl pro váš sortiment a rozpočet. Nemusíte se rozhodovat sami.</p>
     </div>
@@ -287,7 +311,7 @@ site_nav();
 <section class="section" id="proces">
   <div class="wrap process">
     <div class="sec-head sticky-head reveal">
-      <span class="kicker">05 — Jak pracujeme</span>
+      <span class="kicker">06 — Jak pracujeme</span>
       <h2>Jasný postup, <em>žádná překvapení</em></h2>
       <p>Mluvíte přímo s tím, kdo váš projekt dělá. Žádné přeposílání mezi obchodníky.</p>
       <a class="btn btn-ghost magnetic" href="#kontakt"><span>Začít konzultací zdarma</span></a>
@@ -305,7 +329,7 @@ site_nav();
 <section class="section" id="cenik">
   <div class="wrap">
     <div class="sec-head center reveal">
-      <span class="kicker">06 — Ceník</span>
+      <span class="kicker">07 — Ceník</span>
       <h2>Férové ceny, <em>jasně předem</em></h2>
       <p>U projektů na míru dostanete pevnou cenovou nabídku ještě před začátkem práce.</p>
     </div>
@@ -345,7 +369,7 @@ site_nav();
   <div class="wrap">
     <div class="sec-head row reveal">
       <div>
-        <span class="kicker">07 — Hodnocení</span>
+        <span class="kicker">08 — Hodnocení</span>
         <h2>Co říkají <em>klienti</em></h2>
       </div>
       <div class="rating-sum">
@@ -380,7 +404,7 @@ site_nav();
 <section class="section" id="faq">
   <div class="wrap faq-wrap">
     <div class="sec-head reveal">
-      <span class="kicker">08 — Časté dotazy</span>
+      <span class="kicker">09 — Časté dotazy</span>
       <h2>Máte <em>otázky?</em></h2>
       <p>Nenašli jste odpověď? <a href="#kontakt">Napište nám</a>, ozveme se do <?= e(setting('stat_response')) ?> hodin.</p>
     </div>
@@ -400,7 +424,7 @@ site_nav();
   <div class="mesh soft" aria-hidden="true"><i></i><i></i><i></i></div>
   <div class="wrap contact">
     <div class="contact-copy reveal">
-      <span class="kicker">09 — Kontakt</span>
+      <span class="kicker">10 — Kontakt</span>
       <h2>Pojďme vytvořit<br>něco <em>pro vás</em>.</h2>
       <p>Napište, co potřebujete. Ozveme se do <?= e(setting('stat_response')) ?> hodin s návrhem dalšího postupu – nezávazně a zdarma.</p>
       <div class="person">
