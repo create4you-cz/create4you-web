@@ -107,4 +107,8 @@ function migrate(PDO $pdo): void
     if (!in_array('cover_mobile', $cols, true)) {
         $pdo->exec("ALTER TABLE projects ADD COLUMN cover_mobile TEXT NOT NULL DEFAULT ''");
     }
+    if (!in_array('links', $cols, true)) {
+        // Další odkazy, jeden na řádek ve tvaru „Popisek | https://…“ (např. jazykové verze)
+        $pdo->exec("ALTER TABLE projects ADD COLUMN links TEXT NOT NULL DEFAULT ''");
+    }
 }

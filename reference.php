@@ -60,7 +60,12 @@ $tags = array_filter(array_map('trim', explode(',', $p['tags'])));
     <div class="case-text reveal"><?= nl2p($p['body']) ?></div>
     <aside class="reveal">
       <?php if ($tags): ?><h4>Co jsme dodali</h4><ul class="chips"><?php foreach ($tags as $t): ?><li><?= e($t) ?></li><?php endforeach; ?></ul><?php endif; ?>
-      <?php if ($p['url']): ?><a class="btn btn-ghost wide magnetic" href="<?= e($p['url']) ?>" target="_blank" rel="noopener"><span>Navštívit <?= $p['category'] === 'app' ? 'aplikaci' : 'web' ?> ↗</span></a><?php endif; ?>
+      <?php $links = project_links($p); if ($links): ?>
+        <h4><?= count($links) > 1 ? 'Jazykové verze a odkazy' : 'Odkaz' ?></h4>
+        <div class="case-links">
+          <?php foreach ($links as [$label, $url]): ?><a class="btn btn-ghost wide magnetic" href="<?= e($url) ?>" target="_blank" rel="noopener"><span><?= e($label) ?> ↗</span></a><?php endforeach; ?>
+        </div>
+      <?php endif; ?>
       <a class="btn btn-primary wide magnetic" href="./#kontakt"><span>Chci něco podobného</span></a>
     </aside>
   </section>

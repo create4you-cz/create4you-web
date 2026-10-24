@@ -252,6 +252,31 @@ function delete_upload(string $file): void
     }
 }
 
+/** Odkazy reference: hlavní URL + další řádky „Popisek | URL“. Vrací [[popisek, url], …]. */
+function project_links(array $p): array
+{
+    $out = [];
+    foreach (preg_split('~\R~', trim((string) ($p['links'] ?? ''))) ?: [] as $line) {
+        if (!str_contains($line, '|')) {
+            continue;
+        }
+        [$label, $url] = array_map('trim', explode('|', $line, 2));
+        if (preg_match('~^https?://~i', $url)) {
+            $out[] = [$label ?: $url, $url];
+        }
+    }
+    if (!$out && !empty($p['url'])) {
+        $out[] = [preg_replace('~^https?://(www\.)?~', '', rtrim($p['url'], '/')), $p['url']];
+    }
+    return $out;
+}
+
+/** Krátký kód jazykové verze z URL: …/sk → SK, kořen webu → CZ. */
+function link_code(string $url): string
+{
+    return preg_match('~/([a-z]{2})/?$~i', parse_url($url, PHP_URL_PATH) ?? '', $m) ? strtoupper($m[1]) : 'CZ';
+}
+
 function nl2p(string $text): string
 {
     $parts = preg_split("~\R{2,}~", trim($text)) ?: [];

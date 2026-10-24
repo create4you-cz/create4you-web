@@ -139,9 +139,9 @@ site_nav();
               <div class="sm-review">★★★★★ <span>„Konstrukce hotová o týden dřív, než jsme čekali.“</span></div>
               <div class="sm-foot"><b>Napište nám</b><span>info@horak-montaze.cz</span></div>
             </div>
-        <?php endif; ?>
           </div>
         </div>
+        <?php endif; ?>
       </article>
 
       <article class="tile t-app spot reveal">
@@ -214,18 +214,24 @@ site_nav();
 
     <div class="work-grid">
       <?php foreach ($projects as $p): ?>
-        <a class="work <?= $p['featured'] ? 'big' : '' ?> reveal" data-cat="<?= e($p['category']) ?>" href="reference.php?slug=<?= e($p['slug']) ?>" data-cursor="Detail" style="--accent:<?= e($p['accent']) ?>">
+        <?php $links = project_links($p); ?>
+        <article class="work <?= $p['featured'] ? 'big' : '' ?> reveal" data-cat="<?= e($p['category']) ?>" data-cursor="Detail" style="--accent:<?= e($p['accent']) ?>">
           <div class="work-media"><?= project_visual($p) ?></div>
           <div class="work-info">
             <div>
               <span class="work-cat"><?= e(CATEGORIES[$p['category']] ?? '') ?><?= $p['year'] ? ' · ' . e($p['year']) : '' ?></span>
-              <h3><?= e($p['title']) ?></h3>
+              <h3><a class="work-link" href="reference.php?slug=<?= e($p['slug']) ?>"><?= e($p['title']) ?></a></h3>
               <p><?= e($p['excerpt']) ?></p>
+              <?php if ($links): ?>
+                <div class="work-ext">
+                  <?php foreach ($links as [$label, $url]): ?><a href="<?= e($url) ?>" target="_blank" rel="noopener" data-cursor="Otevřít"><?= e(count($links) > 1 ? link_code($url) : $label) ?> ↗</a><?php endforeach; ?>
+                </div>
+              <?php endif; ?>
             </div>
             <span class="work-go" aria-hidden="true">↗</span>
           </div>
           <?php if ($p['status'] === 'progress'): ?><span class="live-badge"><i></i>Právě děláme</span><?php endif; ?>
-        </a>
+        </article>
       <?php endforeach; ?>
     </div>
   </div>

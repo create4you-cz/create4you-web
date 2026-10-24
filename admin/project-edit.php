@@ -8,7 +8,7 @@ $id = (int) ($_GET['id'] ?? $_POST['id'] ?? 0);
 $p = [
     'id' => 0, 'title' => '', 'slug' => '', 'category' => 'web', 'client' => '', 'url' => '', 'year' => date('Y'),
     'status' => 'done', 'excerpt' => '', 'body' => '', 'tags' => '', 'accent' => '#7c5cff', 'cover' => '',
-    'featured' => 0, 'visible' => 1, 'cover_mobile' => '',
+    'featured' => 0, 'visible' => 1, 'cover_mobile' => '', 'links' => '',
 ];
 if ($id) {
     $st = $pdo->prepare('SELECT * FROM projects WHERE id = ?');
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         redirect('project-edit.php?id=' . $id . '#galerie');
     }
 
-    foreach (['title', 'category', 'client', 'url', 'year', 'status', 'excerpt', 'body', 'tags', 'accent'] as $k) {
+    foreach (['title', 'category', 'client', 'url', 'year', 'status', 'excerpt', 'body', 'tags', 'accent', 'links'] as $k) {
         $p[$k] = trim((string) ($_POST[$k] ?? ''));
     }
     $p['featured'] = isset($_POST['featured']) ? 1 : 0;
@@ -67,14 +67,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $slug = unique_slug(slugify($_POST['slug'] ?: $p['title']), $id);
             $vals = [$slug, $p['title'], $p['category'], $p['client'], $p['url'], $p['year'], $p['status'], $p['excerpt'],
-                     $p['body'], $p['tags'], $p['accent'], $p['cover'], $p['featured'], $p['visible'], $p['cover_mobile']];
+                     $p['body'], $p['tags'], $p['accent'], $p['cover'], $p['featured'], $p['visible'], $p['cover_mobile'], $p['links']];
             if ($id) {
                 $pdo->prepare('UPDATE projects SET slug=?, title=?, category=?, client=?, url=?, year=?, status=?, excerpt=?, body=?, tags=?,
-                               accent=?, cover=?, featured=?, visible=?, cover_mobile=?, updated_at=CURRENT_TIMESTAMP WHERE id=?')
+                               accent=?, cover=?, featured=?, visible=?, cover_mobile=?, links=?, updated_at=CURRENT_TIMESTAMP WHERE id=?')
                     ->execute([...$vals, $id]);
             } else {
-                $pdo->prepare('INSERT INTO projects(slug, title, category, client, url, year, status, excerpt, body, tags, accent, cover, featured, visible, cover_mobile, sort)
-                               VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, (SELECT COALESCE(MIN(sort), 0) - 1 FROM projects))')
+                $pdo->prepare('INSERT INTO projects(slug, title, category, client, url, year, status, excerpt, body, tags, accent, cover, featured, visible, cover_mobile, links, sort)
+                               VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, (SELECT COALESCE(MIN(sort), 0) - 1 FROM projects))')
                     ->execute($vals);
                 $id = (int) $pdo->lastInsertId();
             }
@@ -123,6 +123,7 @@ admin_header($id ? 'Upravit referenci' : 'Nová reference', 'projects.php');
       </div>
       <label>Krátký popis (karta v portfoliu)<textarea name="excerpt" rows="2" maxlength="220"><?= e($p['excerpt']) ?></textarea></label>
       <label>Detailní popis (případová studie)<textarea name="body" rows="9" placeholder="Co klient potřeboval, co jsme udělali, výsledek… Prázdný řádek = nový odstavec."><?= e($p['body']) ?></textarea></label>
+      <label>Další odkazy – např. jazykové verze (jeden na řádek: Popisek | https://…)<textarea name="links" rows="3" placeholder="Slovenčina | https://vasweb.cz/sk&#10;English | https://vasweb.cz/en"><?= e($p['links']) ?></textarea></label>
       <label>Štítky (oddělené čárkou)<input name="tags" value="<?= e($p['tags']) ?>" placeholder="Web na míru, E-maily, Admin, SEO"></label>
     </div>
 
