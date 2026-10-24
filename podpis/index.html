@@ -5,42 +5,46 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>E-mailový podpis create4you</title>
 <style>
-  :root { --bg: #f4f3ef; --card: #ffffff; --ink: #121216; --muted: #5e5e68; --line: #e2e0da; --accent: #c6f432; --violet: #4c2bff; color-scheme: light; }
+  :root { --bg: #f4f3ef; --card: #ffffff; --ink: #121216; --muted: #5e5e68; --line: #e2e0da; --accent: #c6f432; --violet: #4c2bff; --warn: #a15c00; color-scheme: light; }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.6 'Segoe UI', Arial, sans-serif; }
-  .wrap { max-width: 760px; margin: 0 auto; padding-block: 40px 60px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .wrap { max-width: 780px; margin: 0 auto; padding-block: 36px 60px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
   h1 { font-size: 28px; letter-spacing: -.02em; margin: 0 0 6px; }
-  .lead { color: var(--muted); margin: 0 0 28px; }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 28px; margin-bottom: 20px; }
-  .mail-head { font-size: 13px; color: var(--muted); border-bottom: 1px solid var(--line); padding-bottom: 12px; margin-bottom: 18px; }
-  .mail-body p { margin: 0 0 14px; }
+  .lead { color: var(--muted); margin: 0 0 24px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 24px; margin-bottom: 18px; }
+  .step { display: inline-block; font: 700 12px/1 ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--violet); margin-bottom: 6px; }
+  h2 { font-size: 20px; margin: 0 0 12px; letter-spacing: -.01em; }
+  .sig { border: 1px dashed var(--line); border-radius: 12px; padding: 18px; margin: 14px 0; overflow-x: auto; }
+  pre { white-space: pre-wrap; font: 14px/1.6 'Segoe UI', Arial, sans-serif; margin: 0; }
+  ol { margin: 0 0 14px; padding-left: 20px; } li { margin-bottom: 6px; }
   .actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-  button { font: 600 15px 'Segoe UI', Arial, sans-serif; border: 0; border-radius: 999px; padding: 12px 22px; cursor: pointer; background: var(--accent); color: var(--ink); }
-  button.ghost { background: transparent; border: 1px solid var(--line); }
+  button { font: 600 14px 'Segoe UI', Arial, sans-serif; border: 0; border-radius: 999px; padding: 11px 20px; cursor: pointer; background: var(--accent); color: var(--ink); }
   button:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
   .status { font-size: 14px; color: var(--muted); }
-  h2 { font-size: 18px; margin: 0 0 10px; }
-  ol { margin: 0; padding-left: 20px; }
-  li { margin-bottom: 6px; }
-  .note { font-size: 14px; color: var(--muted); }
-  code { font-size: 13px; background: #f0efea; padding: 1px 6px; border-radius: 6px; }
-  textarea { width: 100%; min-height: 140px; font: 12px/1.4 ui-monospace, monospace; border: 1px solid var(--line); border-radius: 10px; padding: 10px; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+  .note { font-size: 14px; color: var(--muted); margin: 10px 0 0; }
+  .warn { border-color: #f0d6a8; background: #fffaf0; }
+  .warn h2 { color: var(--warn); }
+  table.dns { width: 100%; border-collapse: collapse; font-size: 13px; margin: 8px 0 12px; }
+  table.dns th, table.dns td { text-align: left; padding: 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.dns code, code { font: 12.5px ui-monospace, monospace; background: #f0efea; padding: 1px 6px; border-radius: 6px; word-break: break-all; }
+  .dns-wrap { overflow-x: auto; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>E-mailový podpis</h1>
-  <p class="lead">Takhle bude podpis vypadat v e-mailu. Zkopírujte ho tlačítkem a vložte do nastavení svého e-mailu.</p>
+  <p class="lead">Logo se v Seznamu nahraje přímo do editoru podpisu. Seznam ho pak přikládá ke každému e-mailu, takže ho příjemci uvidí vždy.</p>
 
   <div class="card">
-    <div class="mail-head">Od: Daniel Peterek &lt;info@create4you.cz&gt; · Předmět: Nabídka webu</div>
-    <div class="mail-body">
-      <p>Dobrý den,</p>
-      <p>v příloze posílám nabídku na nový web. Kdybyste měli jakékoli dotazy, klidně mi zavolejte.</p>
-      <p>S pozdravem</p>
-      <div id="sig"><table cellpadding="0" cellspacing="0" border="0" role="presentation" style="font-family:'Segoe UI',Arial,Helvetica,sans-serif;color:#121216;font-size:14px;line-height:1.45;border-collapse:collapse">
-  <tr><td style="padding:0 0 14px 0"><a href="https://create4you.cz" style="text-decoration:none"><img src="data:image/png;base64,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" width="168" height="36" alt="create4you" style="display:block;border:0;width:168px;height:36px"></a></td></tr>
+    <span class="step">1 · Seznam Email (počítač)</span>
+    <h2>Podpis s logem pro Seznam</h2>
+    <ol>
+      <li>V <b>Nastavení → Odesílatel → Podpis</b> smažte celý současný podpis.</li>
+      <li>Klikněte do prázdného pole podpisu a v liště nástrojů na ikonu <b>obrázku</b> (úplně vpravo). Nahrajte soubor <b>logo-podpis.png</b> (poslal jsem ho do chatu).</li>
+      <li>Za logo stiskněte <b>Enter</b>, zkopírujte podpis tlačítkem níže a vložte ho pod logo (Ctrl+V).</li>
+      <li>Klikněte na <b>Uložit změny</b>.</li>
+    </ol>
+    <div class="sig"><img src="data:image/png;base64,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" width="169" height="36" alt="create4you" style="display:block;margin:0 0 14px 0"><table cellpadding="0" cellspacing="0" border="0" role="presentation" style="font-family:'Segoe UI',Arial,Helvetica,sans-serif;color:#121216;font-size:14px;line-height:1.45;border-collapse:collapse">
   <tr><td style="border-left:3px solid #c6f432;padding:1px 0 1px 14px">
     <table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse">
       <tr><td style="font-size:16px;font-weight:bold;color:#121216;padding:0">Daniel Peterek</td></tr>
@@ -57,58 +61,61 @@
   <tr><td style="padding:14px 0 0 0"><a href="https://create4you.cz/#sablony" style="display:inline-block;background-color:#c6f432;color:#121216;text-decoration:none;font-size:12px;font-weight:bold;padding:6px 14px;border-radius:99px">Web do 48 hodin za 700&nbsp;Kč/měsíc&nbsp;→</a></td></tr>
   <tr><td style="padding:12px 0 0 0;font-size:11px;color:#8a8a96">Daniel Peterek · IČO 08096589 · Ostrava</td></tr>
 </table></div>
-    </div>
+    <div class="actions"><button type="button" data-copy="seznam">Zkopírovat podpis pro Seznam</button><span class="status" data-status="seznam" role="status" aria-live="polite"></span></div>
   </div>
 
   <div class="card">
-    <div class="actions">
-      <button type="button" id="copy">Zkopírovat podpis</button>
-      <button type="button" class="ghost" id="copy-html">Zkopírovat HTML kód</button>
-      <span class="status" id="status" role="status" aria-live="polite"></span>
-    </div>
-    <p class="note">Logo se v e-mailech načítá z webu <code>create4you.cz/assets/img/email/logo.png</code> – zobrazí se, jakmile bude web spuštěný.</p>
-    <label for="code" class="note">HTML kód podpisu (pro ruční vložení):</label>
-    <textarea id="code" readonly></textarea>
+    <span class="step">2 · Gmail v telefonu</span>
+    <h2>Textový podpis pro aplikaci Gmail</h2>
+    <p>Aplikace Gmail v telefonu umí jen text, logo ani barvy tam vložit nejde (omezení Gmailu).</p>
+    <ol>
+      <li>Gmail → <b>☰ menu</b> → <b>Nastavení</b> → vyberte účet <b>info@create4you.cz</b>.</li>
+      <li><b>Podpis pro mobil</b> (Android) / <b>Nastavení podpisu</b> (iPhone) → zapnout.</li>
+      <li>Vložte text níže a uložte.</li>
+    </ol>
+    <div class="sig"><pre id="text-sig">Daniel Peterek
+create4you · weby, aplikace a e-shopy na míru
++420 775 241 298 · info@create4you.cz
+create4you.cz</pre></div>
+    <div class="actions"><button type="button" data-copy="text">Zkopírovat text</button><span class="status" data-status="text" role="status" aria-live="polite"></span></div>
   </div>
 
-  <div class="grid">
-    <div class="card"><h2>Gmail</h2><ol>
-      <li>Ozubené kolečko → <b>Zobrazit všechna nastavení</b>.</li>
-      <li>Karta <b>Obecné</b> → sekce <b>Podpis</b> → <b>Vytvořit nový</b>.</li>
-      <li>Do pole vložte podpis (Ctrl+V / Cmd+V).</li>
-      <li>Dole klikněte na <b>Uložit změny</b>.</li></ol></div>
-    <div class="card"><h2>Outlook</h2><ol>
-      <li><b>Nastavení</b> → <b>Účty</b> → <b>Podpisy</b> (v aplikaci: Soubor → Možnosti → Pošta → Podpisy).</li>
-      <li><b>Nový podpis</b>, pojmenujte ho „create4you“.</li>
-      <li>Vložte podpis (Ctrl+V) a nastavte ho jako výchozí.</li>
-      <li>Uložte.</li></ol></div>
-    <div class="card"><h2>Apple Mail</h2><ol>
-      <li><b>Mail</b> → <b>Nastavení</b> → <b>Podpisy</b>.</li>
-      <li>Vyberte účet a klikněte na <b>+</b>.</li>
-      <li>Vypněte „Vždy použít výchozí písmo zprávy“ a vložte podpis (Cmd+V).</li>
-      <li>Zavřete okno – uloží se samo.</li></ol></div>
+  <div class="card warn">
+    <h2>Proč e-maily padají do spamu a jak to opravit</h2>
+    <p>Doména create4you.cz je nová a poštovní servery zatím nemají důkaz, že Seznam smí posílat poštu jejím jménem. To se nastavuje třemi záznamy v DNS u registrátora domény (tam, kde jste doménu koupili):</p>
+    <div class="dns-wrap"><table class="dns">
+      <tr><th>Záznam</th><th>Typ · název</th><th>Hodnota</th></tr>
+      <tr><td><b>SPF</b> – kdo smí posílat</td><td>TXT · <code>@</code></td><td>Přesnou hodnotu najdete v administraci domény u Seznamu (obvykle obsahuje <code>include:</code> se serverem Seznamu). Na doméně smí být jen <b>jeden</b> SPF záznam.</td></tr>
+      <tr><td><b>DKIM</b> – digitální podpis zpráv</td><td>TXT · podle Seznamu</td><td>Klíč vygenerujete v administraci domény u Seznamu a zkopírujete do DNS.</td></tr>
+      <tr><td><b>DMARC</b> – co dělat s podvrženou poštou</td><td>TXT · <code>_dmarc</code></td><td><code>v=DMARC1; p=none; rua=mailto:info@create4you.cz</code></td></tr>
+    </table></div>
+    <ol>
+      <li>Nastavte SPF a DKIM podle údajů od Seznamu a přidejte DMARC záznam výše.</li>
+      <li>Po hodině pošlete e-mail na adresu, kterou vám ukáže <b>mail-tester.com</b>. Uvidíte známku z 10 a přesný důvod každého problému.</li>
+      <li>Kde vám e-mail spadl do spamu (např. v Gmailu), označte ho <b>Není spam</b>. Gmail se tím doménu učí.</li>
+      <li>Spusťte web na create4you.cz. Odkazy v podpisu pak povedou na existující stránku, což spamové filtry také hodnotí.</li>
+    </ol>
   </div>
 </div>
 <script>
-  var SIG_HTML = "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" role=\"presentation\" style=\"font-family:'Segoe UI',Arial,Helvetica,sans-serif;color:#121216;font-size:14px;line-height:1.45;border-collapse:collapse\">\n  <tr><td style=\"padding:0 0 14px 0\"><a href=\"https://create4you.cz\" style=\"text-decoration:none\"><img src=\"https://create4you.cz/assets/img/email/logo.png\" width=\"168\" height=\"36\" alt=\"create4you\" style=\"display:block;border:0;width:168px;height:36px\"></a></td></tr>\n  <tr><td style=\"border-left:3px solid #c6f432;padding:1px 0 1px 14px\">\n    <table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" role=\"presentation\" style=\"border-collapse:collapse\">\n      <tr><td style=\"font-size:16px;font-weight:bold;color:#121216;padding:0\">Daniel Peterek</td></tr>\n      <tr><td style=\"font-size:13px;color:#5e5e68;padding:0 0 10px 0\">Zakladatel · weby, aplikace a e-shopy na míru</td></tr>\n      <tr><td style=\"padding:0\">\n        <table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" role=\"presentation\" style=\"border-collapse:collapse;font-size:13px\">\n          <tr><td style=\"color:#8a8a96;padding:1px 12px 1px 0\">telefon</td><td style=\"padding:1px 0\"><a href=\"tel:+420775241298\" style=\"color:#121216;text-decoration:none;font-weight:bold\">+420 775 241 298</a></td></tr>\n          <tr><td style=\"color:#8a8a96;padding:1px 12px 1px 0\">e-mail</td><td style=\"padding:1px 0\"><a href=\"mailto:info@create4you.cz\" style=\"color:#4c2bff;text-decoration:none\">info@create4you.cz</a></td></tr>\n          <tr><td style=\"color:#8a8a96;padding:1px 12px 1px 0\">web</td><td style=\"padding:1px 0\"><a href=\"https://create4you.cz\" style=\"color:#4c2bff;text-decoration:none\">create4you.cz</a></td></tr>\n        </table>\n      </td></tr>\n    </table>\n  </td></tr>\n  <tr><td style=\"padding:14px 0 0 0\"><a href=\"https://create4you.cz/#sablony\" style=\"display:inline-block;background-color:#c6f432;color:#121216;text-decoration:none;font-size:12px;font-weight:bold;padding:6px 14px;border-radius:99px\">Web do 48 hodin za 700&nbsp;Kč/měsíc&nbsp;→</a></td></tr>\n  <tr><td style=\"padding:12px 0 0 0;font-size:11px;color:#8a8a96\">Daniel Peterek · IČO 08096589 · Ostrava</td></tr>\n</table>";
-  var statusEl = document.getElementById('status');
-  var code = document.getElementById('code');
-  code.value = SIG_HTML;
-  function done(msg) { statusEl.textContent = msg; }
-  function selectPreview() {
-    var r = document.createRange(); r.selectNodeContents(document.getElementById('sig'));
-    var s = getSelection(); s.removeAllRanges(); s.addRange(r);
-  }
-  document.getElementById('copy').addEventListener('click', function () {
-    try {
-      var item = new ClipboardItem({ 'text/html': new Blob([SIG_HTML], { type: 'text/html' }), 'text/plain': new Blob(['Daniel Peterek\n+420 775 241 298\ninfo@create4you.cz\ncreate4you.cz'], { type: 'text/plain' }) });
-      navigator.clipboard.write([item]).then(function () { done('Podpis je zkopírovaný – vložte ho do nastavení e-mailu.'); }, function () { selectPreview(); done('Podpis je označený – zkopírujte ho klávesami Ctrl+C / Cmd+C.'); });
-    } catch (e) { selectPreview(); done('Podpis je označený – zkopírujte ho klávesami Ctrl+C / Cmd+C.'); }
-  });
-  document.getElementById('copy-html').addEventListener('click', function () {
-    var ok = function () { done('HTML kód je zkopírovaný.'); };
-    try { navigator.clipboard.writeText(SIG_HTML).then(ok, function () { code.select(); done('Kód je označený – zkopírujte ho klávesami Ctrl+C / Cmd+C.'); }); }
-    catch (e) { code.select(); done('Kód je označený – zkopírujte ho klávesami Ctrl+C / Cmd+C.'); }
+  var SIG = { seznam: "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" role=\"presentation\" style=\"font-family:'Segoe UI',Arial,Helvetica,sans-serif;color:#121216;font-size:14px;line-height:1.45;border-collapse:collapse\">\n  <tr><td style=\"border-left:3px solid #c6f432;padding:1px 0 1px 14px\">\n    <table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" role=\"presentation\" style=\"border-collapse:collapse\">\n      <tr><td style=\"font-size:16px;font-weight:bold;color:#121216;padding:0\">Daniel Peterek</td></tr>\n      <tr><td style=\"font-size:13px;color:#5e5e68;padding:0 0 10px 0\">Zakladatel · weby, aplikace a e-shopy na míru</td></tr>\n      <tr><td style=\"padding:0\">\n        <table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" role=\"presentation\" style=\"border-collapse:collapse;font-size:13px\">\n          <tr><td style=\"color:#8a8a96;padding:1px 12px 1px 0\">telefon</td><td style=\"padding:1px 0\"><a href=\"tel:+420775241298\" style=\"color:#121216;text-decoration:none;font-weight:bold\">+420 775 241 298</a></td></tr>\n          <tr><td style=\"color:#8a8a96;padding:1px 12px 1px 0\">e-mail</td><td style=\"padding:1px 0\"><a href=\"mailto:info@create4you.cz\" style=\"color:#4c2bff;text-decoration:none\">info@create4you.cz</a></td></tr>\n          <tr><td style=\"color:#8a8a96;padding:1px 12px 1px 0\">web</td><td style=\"padding:1px 0\"><a href=\"https://create4you.cz\" style=\"color:#4c2bff;text-decoration:none\">create4you.cz</a></td></tr>\n        </table>\n      </td></tr>\n    </table>\n  </td></tr>\n  <tr><td style=\"padding:14px 0 0 0\"><a href=\"https://create4you.cz/#sablony\" style=\"display:inline-block;background-color:#c6f432;color:#121216;text-decoration:none;font-size:12px;font-weight:bold;padding:6px 14px;border-radius:99px\">Web do 48 hodin za 700&nbsp;Kč/měsíc&nbsp;→</a></td></tr>\n  <tr><td style=\"padding:12px 0 0 0;font-size:11px;color:#8a8a96\">Daniel Peterek · IČO 08096589 · Ostrava</td></tr>\n</table>" };
+  var TEXT = "Daniel Peterek\ncreate4you · weby, aplikace a e-shopy na míru\n+420 775 241 298 · info@create4you.cz\ncreate4you.cz";
+  function say(key, msg) { document.querySelector('[data-status="' + key + '"]').textContent = msg; }
+  function selectNode(node) { var r = document.createRange(); r.selectNodeContents(node); var s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+  document.querySelectorAll('[data-copy]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var key = btn.getAttribute('data-copy');
+      var box = btn.closest('.card').querySelector('.sig');
+      var fallback = function () { selectNode(key === 'text' ? document.getElementById('text-sig') : box); say(key, 'Podpis je označený – zkopírujte ho klávesami Ctrl+C / Cmd+C.'); };
+      try {
+        if (key === 'text') {
+          navigator.clipboard.writeText(TEXT).then(function () { say(key, 'Text je zkopírovaný.'); }, fallback);
+          return;
+        }
+        var item = new ClipboardItem({ 'text/html': new Blob([SIG[key]], { type: 'text/html' }), 'text/plain': new Blob([TEXT], { type: 'text/plain' }) });
+        navigator.clipboard.write([item]).then(function () { say(key, 'Zkopírováno – vložte do nastavení podpisu.'); }, fallback);
+      } catch (e) { fallback(); }
+    });
   });
 </script>
 </body>

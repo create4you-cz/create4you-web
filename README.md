@@ -92,4 +92,4 @@ npm run seed-sql   # přegeneruje supabase/seed.sql z data/seed.json
 ```
 
 ## E-mailový podpis
-Otevřete `podpis/index.html`, klikněte na **Zkopírovat podpis** a vložte ho do nastavení e-mailu (návod je na stránce). Logo se načítá z `https://create4you.cz/assets/img/email/logo.png`, zobrazí se tedy až po spuštění webu.
+Otevřete `podpis/index.html` a postupujte podle návodu. V Seznamu se logo (`podpis/logo-podpis.png`) nahraje tlačítkem obrázku přímo do editoru podpisu, v aplikaci Gmail v telefonu jde jen textový podpis. `podpis/podpis.html` je plná verze, která logo načítá z webu.
