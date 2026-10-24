@@ -86,9 +86,7 @@ site_nav();
         <?php endforeach; ?>
       </div>
       <div class="float f-pay tilt"><span class="ok-ic">✓</span><div><b>Platba přijata</b><small>Faktura 2026-118 · 12 400 Kč</small></div></div>
-      <div class="float f-speed tilt"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.5" fill="none" stroke="currentColor" stroke-opacity=".15" stroke-width="3"/><circle class="ring" cx="18" cy="18" r="15.5" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="97.4" stroke-dashoffset="2" stroke-linecap="round" transform="rotate(-90 18 18)"/></svg><div><b>98</b><small>PageSpeed<br>na mobilu</small></div></div>
       <div class="float f-lead tilt"><span class="av">JK</span><div><b>Nová poptávka z webu</b><small>„Potřebujeme e-shop na Shoptetu…“</small></div><i>teď</i></div>
-      <div class="float f-48 tilt"><b>48 h</b><small>od objednávky<br>po spuštění</small></div>
       <div class="hv-dots"><?php foreach ($showcase as $i => $p): ?><button type="button" class="<?= $i === 0 ? 'on' : '' ?>" aria-label="<?= e($p['title']) ?>"></button><?php endforeach; ?></div>
     </div>
   </div>
@@ -124,10 +122,7 @@ site_nav();
         <ul class="chips"><li>Design na míru</li><li>Administrace</li><li>SEO</li><li>E-maily</li><li>Hosting</li></ul>
         <?php $realWeb = current(array_filter($projects, fn ($p) => $p['cover'] && $p['category'] === 'web')); ?>
         <?php if ($realWeb): ?>
-        <a class="t-mock site-mock real" href="reference.php?slug=<?= e($realWeb['slug']) ?>" data-cursor="Detail">
-          <div class="wm-bar"><i></i><i></i><i></i><span><?= e(preg_replace('~^https?://(www\.)?~', '', rtrim($realWeb['url'], '/')) ?: $realWeb['title']) ?></span></div>
-          <div class="scroller"><img src="<?= e(upload_url($realWeb['cover'])) ?>" alt="<?= e($realWeb['title']) ?>" loading="lazy"></div>
-        </a>
+        <a class="t-mock real-web" href="reference.php?slug=<?= e($realWeb['slug']) ?>" data-cursor="Detail"><?= project_visual(['cover_mobile' => ''] + $realWeb) ?></a>
         <?php else: ?>
         <div class="t-mock site-mock" aria-hidden="true">
           <div class="wm-bar"><i></i><i></i><i></i><span>www.horak-montaze.cz</span></div>

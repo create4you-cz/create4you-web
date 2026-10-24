@@ -55,9 +55,9 @@ function seed(PDO $pdo): void
         ],
         [
             'dokly-ai', 'Dokly.ai', 'app', 'Dokly', 'https://dokly.ai', '2026', 'progress',
-            'Chytrá aplikace s umělou inteligencí pro práci s dokumenty.',
-            "Produkt postavený na AI, který zjednodušuje práci s dokumenty.\n\nNávrh, vývoj i provoz – od prvního prototypu až po ostrou verzi.",
-            'AI, SaaS, Webová aplikace', '#7c5cff', 0, $ref('dokly.webp'), '',
+            'Operační systém účetní kanceláře – doklady od klientů s AI vytěžováním, agendy a termíny, datové schránky, banky, mzdy a fakturace.',
+            "SaaS pro účetní kanceláře v Česku a na Slovensku, který právě stavíme.\n\nKlienti nahrají doklady v portálu nebo je pošlou e-mailem a údaje se z nich načtou samy. Kancelář vidí po agendách, co je u kterého klienta hotové, hlídá termíny a urgence a posílá klientům zprávy a faktury ze šablon.\n\nNa jednom místě jsou doklady, vytěžování, datové schránky, banky, mzdy, fakturace i komunikace s klienty. Klienta stačí přidat přes IČO – zbytek se doplní z rejstříků.",
+            'SaaS, AI vytěžování dokladů, Klientský portál, Datové schránky, Fakturace', '#1e3a64', 1, $ref('dokly.webp'), '',
         ],
         [
             'aplikace-rizeni-firem', 'Aplikace pro řízení firem', 'app', 'Různí klienti', '', '2024', 'done',
@@ -90,6 +90,7 @@ function seed(PDO $pdo): void
     // Další screenshoty do galerií
     $gallery = [
         'accuwise' => [['accuwise-kr.webp', 'Korejská jazyková verze pro korejské firmy v ČR a SR']],
+        'dokly-ai' => [['dokly-login.webp', 'Přihlášení a založení kanceláře']],
     ];
     $gi = $pdo->prepare('INSERT INTO project_images(project_id, file, caption, sort) SELECT id, ?, ?, ? FROM projects WHERE slug = ?');
     foreach ($gallery as $slug => $imgs) {

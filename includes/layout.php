@@ -113,9 +113,48 @@ function site_footer(): void
 <?php
 }
 
+/** Cesta k souboru na disku pro obrázek z assets/ nebo z uploads/. */
+function image_path(string $file): ?string
+{
+    global $CONFIG;
+    if ($file === '') {
+        return null;
+    }
+    $path = str_starts_with($file, 'assets/') ? __DIR__ . '/../' . $file : $CONFIG['upload_dir'] . '/' . $file;
+    return is_file($path) ? $path : null;
+}
+
+/** Rozměry obrázku [šířka, výška], nebo null. */
+function image_size(string $file): ?array
+{
+    $path = image_path($file);
+    $info = $path ? @getimagesize($path) : false;
+    return $info ? [$info[0], $info[1]] : null;
+}
+
+/** Barva horního okraje obrázku (pro stavový řádek telefonu), např. #ffffff. */
+function image_top_color(string $file): string
+{
+    $path = image_path($file);
+    $img = $path ? @imagecreatefromstring((string) file_get_contents($path)) : false;
+    if (!$img) {
+        return '#ffffff';
+    }
+    $c = imagecolorsforindex($img, imagecolorat($img, (int) (imagesx($img) / 2), 1));
+    imagedestroy($img);
+    return sprintf('#%02x%02x%02x', $c['red'], $c['green'], $c['blue']);
+}
+
+/** Je barva tmavá? (pro barvu textu ve stavovém řádku) */
+function is_dark(string $hex): bool
+{
+    [$r, $g, $b] = sscanf($hex, '#%02x%02x%02x');
+    return (0.299 * $r + 0.587 * $g + 0.114 * $b) < 140;
+}
+
 /**
- * Náhled projektu v rámečku notebooku a telefonu.
- * Se screenshotem: obrázek se při najetí myší roluje (ideální je screenshot celé stránky).
+ * Náhled projektu: okno prohlížeče se screenshotem webu (v přesném poměru stran – nic se neořízne)
+ * a telefon s mobilní verzí. Delší screenshot (celá stránka) se v okně při najetí roluje.
  * Bez screenshotu: typografický plakát v barvách projektu.
  */
 function project_visual(array $p, string $class = ''): string
@@ -123,23 +162,35 @@ function project_visual(array $p, string $class = ''): string
     $host = $p['url'] ? preg_replace('~^https?://(www\.)?~', '', rtrim($p['url'], '/')) : '';
     $desk = $p['cover'] ?? '';
     $mob  = $p['cover_mobile'] ?? '';
-    $screen = static fn (string $file, string $alt) => '<div class="scroller"><img src="' . e(upload_url($file)) . '" alt="' . e($alt) . '" loading="lazy"></div>';
 
-    if ($desk) {
-        $laptop = $screen($desk, $p['title'] . ' – počítač');
+    // Okno prohlížeče
+    if ($desk && ($size = image_size($desk))) {
+        $ratio = max($size[0] / $size[1], 1.6); // vyšší než 16:10 → roluje se
+        $screen = '<div class="scroller" style="aspect-ratio:' . round($ratio, 4) . '"><img src="' . e(upload_url($desk)) . '" alt="' . e($p['title']) . ' – počítač" loading="lazy"></div>';
     } else {
         $tags = array_slice(array_filter(array_map('trim', explode(',', $p['tags']))), 0, 3);
-        $laptop = '<div class="poster"><span class="poster-cat">' . e(CATEGORIES[$p['category']] ?? '') . '</span>'
+        $screen = '<div class="poster"><span class="poster-cat">' . e(CATEGORIES[$p['category']] ?? '') . '</span>'
                 . '<strong>' . e($p['title']) . '</strong>'
                 . '<span class="poster-tags">' . implode('', array_map(fn ($t) => '<i>' . e($t) . '</i>', $tags)) . '</span></div>';
     }
-    // Telefon jen se skutečným mobilním screenshotem (nebo s plakátem, když screenshot není vůbec)
-    $phone = $mob ? $screen($mob, $p['title'] . ' – mobil') : ($desk ? '' : '<div class="poster small"><strong>' . e($p['title']) . '</strong></div>');
+    $browser = '<div class="browser"><div class="br-bar"><i></i><i></i><i></i><span class="br-url">'
+             . '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V8a5 5 0 0110 0v3M5 11h14v10H5z" fill="none" stroke="currentColor" stroke-width="2"/></svg>'
+             . e($host ?: mb_strtolower($p['title'])) . '</span></div>' . $screen . '</div>';
 
-    return '<div class="devices ' . ($phone ? '' : 'no-phone ') . $class . '" style="--accent:' . e($p['accent']) . '">'
-         . '<div class="laptop"><div class="lp-screen"><div class="lp-bar"><i></i><i></i><i></i>' . ($host ? '<span>' . e($host) . '</span>' : '') . '</div>' . $laptop . '</div><div class="lp-base"></div></div>'
-         . ($phone ? '<div class="phone"><div class="ph-screen">' . $phone . '</div></div>' : '')
-         . '</div>';
+    // Telefon – jen se skutečným mobilním screenshotem
+    $phone = '';
+    if ($mob && ($ms = image_size($mob))) {
+        $top = image_top_color($mob);
+        $ratio = max($ms[0] / $ms[1], 0.46); // delší screenshot se roluje
+        $phone = '<div class="phone"><div class="ph-frame"><div class="ph-screen">'
+               . '<div class="ph-status ' . (is_dark($top) ? 'light' : '') . '" style="background:' . e($top) . '"><b>9:41</b><span class="ph-island"></span>'
+               . '<span class="ph-icons"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>'
+               . '<svg viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="16" height="8" rx="1.8"/><rect x="23.6" y="4" width="1.6" height="4" rx=".8" opacity=".45"/></svg></span></div>'
+               . '<div class="scroller" style="aspect-ratio:' . round($ratio, 4) . '"><img src="' . e(upload_url($mob)) . '" alt="' . e($p['title']) . ' – mobil" loading="lazy"></div>'
+               . '<span class="ph-home"></span></div></div></div>';
+    }
+
+    return '<div class="devices ' . ($phone ? 'has-phone ' : '') . $class . '" style="--accent:' . e($p['accent']) . '">' . $browser . $phone . '</div>';
 }
 
 /** Fotka z assets/img/photos/<název>.(webp|jpg|png), nebo prázdný řetězec, pokud zatím chybí. */
