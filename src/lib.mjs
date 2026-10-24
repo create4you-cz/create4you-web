@@ -229,8 +229,8 @@ export function footer(ctx, { scripts = ['main.js', 'demos.js'] } = {}) {
     </div>
     <div class="wordmark" aria-hidden="true">create4you</div>
     <div class="foot-bottom">
-      <span>© 2019–${new Date().getFullYear()} create4you.cz</span>
-      <span><a href="${ctx.base}zasady/">Ochrana osobních údajů</a> · <a href="${ctx.base}admin/" rel="nofollow">Administrace</a></span>
+      <span>© ${new Date().getFullYear()} create4you.cz</span>
+      <span><a href="${ctx.base}zasady/">Ochrana osobních údajů</a></span>
     </div>
   </div>
 </footer>

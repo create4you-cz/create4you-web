@@ -60,7 +60,7 @@ Vytvořte soukromý repozitář (např. `create4you-web`) a nahrajte do něj ten
 
 ### 4. Hotovo
 - Web: `https://create4you.cz`
-- Administrace: `https://create4you.cz/admin/` (přihlášení e-mailem a heslem ze Supabase)
+- Administrace: `https://create4you.cz/admin/` (přihlášení e-mailem a heslem ze Supabase). Na webu na ni záměrně nevede žádný odkaz a má zakázané indexování vyhledávači.
 
 > Supabase na bezplatném tarifu po týdnu bez aktivity uspí projekt. **Web běží dál**, protože stránky jsou hotové na Netlify. Uspaný projekt probudíte v dashboardu Supabase tlačítkem *Restore*. Bez toho nepůjde administrace ani formulář.
 

@@ -1,5 +1,4 @@
 User-agent: *
-Disallow: /admin/
 Disallow: /api/
 
 Sitemap: https://create4you.cz/sitemap.xml

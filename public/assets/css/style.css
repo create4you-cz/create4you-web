@@ -436,7 +436,7 @@ body::before {
 .foot-grid h4 { font: 500 12px var(--f-mono); text-transform: uppercase; letter-spacing: .12em; color: var(--muted); margin-bottom: 6px; }
 .foot-grid a { text-decoration: none; }
 .foot-grid a:hover { color: var(--accent-text); }
-.wordmark { font: 700 clamp(64px, 18.5vw, 270px)/.8 var(--f-head); letter-spacing: -.07em; text-align: center; margin: 70px 0 30px; white-space: nowrap;
+.wordmark { font: 700 clamp(64px, 18.5vw, 270px)/.8 var(--f-head); letter-spacing: -.07em; text-align: center; margin: 70px 0 30px; white-space: nowrap; pointer-events: none; user-select: none;
   background: linear-gradient(180deg, var(--text) 10%, transparent 95%); -webkit-background-clip: text; background-clip: text; color: transparent; opacity: .12; user-select: none; }
 .foot-bottom { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 14px; color: var(--muted); }
 .foot-bottom a { color: var(--muted); }
