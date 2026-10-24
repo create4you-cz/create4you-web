@@ -499,6 +499,8 @@ body::before {
 .f-lead > i { position: absolute; top: 8px; right: 12px; font: 500 10px var(--f-mono); font-style: normal; color: var(--lime); }
 :root[data-theme="light"] .f-lead > i { color: var(--accent-text); }
 
+.ma-row em, .kb-card footer em { width: 30px; height: 30px; flex: none; border-radius: 50%; display: grid; place-items: center; font: 600 11px var(--f-body); font-style: normal; color: #fff; background: var(--c); }
+
 /* ---------- bento: realistic mini content ---------- */
 .site-mock { position: relative; margin-top: auto; border-radius: 16px 16px 0 0; border: 1px solid var(--border2); border-bottom: 0; background: #fbfaf7; color: #1b1e24; height: 250px; margin-bottom: -32px; overflow: hidden; }
 .site-mock .wm-bar { display: flex; align-items: center; gap: 6px; padding: 10px 14px; background: #eeece6; }
