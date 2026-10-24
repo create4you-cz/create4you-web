@@ -315,6 +315,15 @@ body::before {
 .tf-swap .tf-hero, .tf-swap .tf-cards { animation: swap .6s var(--ease); }
 @keyframes swap { from { opacity: 0; transform: translateY(10px); } }
 .tpl-note { color: var(--muted); font-size: 14px; margin-top: 14px; }
+.tpl-real { display: flex; align-items: center; gap: 16px; margin-top: 18px; padding: 12px; border-radius: 18px; border: 1px solid var(--border2); background: var(--surface); text-decoration: none; transition: border-color .3s, transform .4s var(--ease); }
+.tpl-real:hover { border-color: var(--lime); transform: translateY(-2px); }
+.tpl-real img { width: 150px; aspect-ratio: 16 / 10; object-fit: cover; object-position: top left; border-radius: 10px; flex: none; border: 1px solid var(--border); }
+.tpl-real span { display: flex; flex-direction: column; min-width: 0; }
+.tpl-real small { font: 500 11px var(--f-mono); text-transform: uppercase; letter-spacing: .1em; color: var(--accent-text); }
+.tpl-real b { font: 600 20px var(--f-head); letter-spacing: -.02em; }
+.tpl-real em { color: var(--muted); font-size: 14px; font-style: normal; }
+.tpl-real i { margin-left: auto; font-style: normal; font-size: 20px; padding-right: 8px; transition: transform .3s var(--ease); }
+.tpl-real:hover i { transform: translateX(4px); }
 .timeline { list-style: none; padding: 0; margin: 0 0 28px; position: relative; display: grid; gap: 20px; }
 .timeline::before { content: ""; position: absolute; left: 9px; top: 10px; bottom: 10px; width: 2px; background: linear-gradient(var(--lime), var(--violet)); }
 .timeline li { position: relative; padding-left: 40px; }
@@ -899,3 +908,7 @@ body::before {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
   .reveal, .split .w { opacity: 1; transform: none; }
 }
+
+/* telefon: screenshot vždy na celou šířku displeje (neořezávat boky) */
+.phone { aspect-ratio: 9 / 18; }
+.ph-screen .scroller img { min-height: 0; }

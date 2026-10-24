@@ -270,6 +270,14 @@ site_nav();
           </div>
         </div>
         <p class="tpl-note">Interaktivní ukázka – barvy, písma i rozložení vždy přizpůsobíme vaší značce.</p>
+        <?php $tplReal = current(array_filter($projects, fn ($p) => $p['category'] === 'sablona' && $p['cover'])); ?>
+        <?php if ($tplReal): ?>
+        <a class="tpl-real" href="reference.php?slug=<?= e($tplReal['slug']) ?>" data-cursor="Detail">
+          <img src="<?= e(upload_url($tplReal['cover'])) ?>" alt="<?= e($tplReal['title']) ?>" loading="lazy">
+          <span><small>Příklad z praxe · hotovo za 48 h</small><b><?= e($tplReal['title']) ?></b><em><?= e(preg_replace('~^https?://(www\.)?~', '', rtrim($tplReal['url'], '/'))) ?></em></span>
+          <i aria-hidden="true">→</i>
+        </a>
+        <?php endif; ?>
       </div>
 
       <div class="tpl-side">

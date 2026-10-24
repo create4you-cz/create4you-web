@@ -36,10 +36,10 @@ function seed(PDO $pdo): void
             'CRM na míru, Zakázky a rozpočty, Docházka, Sklad, Týmový chat', '#ff5a1f', 1, $ref('artlux-flow.webp'), '',
         ],
         [
-            'montig-weld', 'Montig Weld', 'web', 'Montig Weld s.r.o.', 'https://montigweld.cz', '2025', 'done',
+            'montig-weld', 'Montig Weld', 'sablona', 'Montig Weld s.r.o.', 'https://montigweld.cz', '2025', 'done',
             'Web firmy pro rekonstrukce a opravy energetických zařízení – kotle, potrubní rozvody a ocelové konstrukce v Česku i v EU.',
-            "Web pro specialisty na energetiku a průmyslové potrubí.\n\nOd prvního pohledu ukazuje, co firma umí: opravy a montáže kotlů, potrubních rozvodů a ocelových konstrukcí, svařovací metody TIG, MMA, MAG i orbitální svařování a kvalifikaci dle ČSN EN ISO 9606-1.\n\nSekce služeb, referencí, certifikací a kariéry, rychlý kontakt v horní liště a nezávazná poptávka na jedno kliknutí. Včetně firemních e-mailů a domény.",
-            'Web na míru, Reference, Certifikace, Kariéra, E-maily', '#e3001b', 1, $ref('montigweld.webp'), '',
+            "Šablonový web hotový do 48 hodin – a přitom vypadá jako web na míru.\n\nWeb pro specialisty na energetiku a průmyslové potrubí. Od prvního pohledu ukazuje, co firma umí: opravy a montáže kotlů, potrubních rozvodů a ocelových konstrukcí, svařovací metody TIG, MMA, MAG i orbitální svařování a kvalifikaci dle ČSN EN ISO 9606-1.\n\nSekce služeb, referencí, certifikací a kariéry, rychlý kontakt v horní liště a nezávazná poptávka na jedno kliknutí. Včetně firemních e-mailů a domény.",
+            'Šablona 48 h, Reference, Certifikace, Kariéra, E-maily', '#e3001b', 1, $ref('montigweld.webp'), '',
         ],
         [
             'artlux-investment', 'Artlux Invest', 'web', 'Artlux Investment', 'https://artluxinvest.cz', '2025', 'done',
@@ -70,6 +70,21 @@ function seed(PDO $pdo): void
                          VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
     foreach ($projects as $i => $p) {
         $st->execute([...$p, $i]);
+    }
+
+    // Mobilní screenshoty
+    $mobile = [
+        'accuwise' => 'accuwise-m.webp',
+        'accuflow' => 'accuflow-m.webp',
+        'artlux-flow' => 'artlux-flow-m.webp',
+        'artlux-investment' => 'artlux-investment-m.webp',
+        'montig-weld' => 'montigweld-m.webp',
+    ];
+    $um = $pdo->prepare('UPDATE projects SET cover_mobile = ? WHERE slug = ?');
+    foreach ($mobile as $slug => $file) {
+        if ($ref($file)) {
+            $um->execute([$ref($file), $slug]);
+        }
     }
 
     // Další screenshoty do galerií
