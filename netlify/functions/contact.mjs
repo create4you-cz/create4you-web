@@ -1,4 +1,6 @@
-// Kontaktní formulář: ochrana proti spamu → uložení poptávky do Supabase → upozornění e-mailem (volitelně přes Resend)
+// Kontaktní formulář: ochrana proti spamu → uložení poptávky do Supabase → e-mail nám + potvrzení zákazníkovi
+import { mailConfigured, sendMail, inquiryEmail, confirmationEmail } from '../lib/mail.mjs';
+
 const env = (k) => process.env[k] || '';
 
 const reply = (req, ok, message, status = 200) => {
@@ -58,25 +60,28 @@ export default async (req, context) => {
     }
   }
 
-  const saved = await db('inquiries', { method: 'POST', body: JSON.stringify(data), headers: { Prefer: 'return=minimal' } });
+  const saved = await db('inquiries', { method: 'POST', body: JSON.stringify(data), headers: { Prefer: 'return=representation' } });
   if (!saved.ok) {
     console.error('Uložení poptávky selhalo', saved.status, await saved.text());
     return reply(req, false, 'Odeslání se nepovedlo. Napište nám prosím přímo e-mail.', 500);
   }
+  const id = (await saved.json().catch(() => []))[0]?.id;
 
-  // Upozornění e-mailem (jen pokud je nastavený Resend)
-  if (env('RESEND_API_KEY') && env('NOTIFY_EMAIL')) {
-    const text = `Nová poptávka z webu create4you.cz\n\nJméno: ${data.name}\nFirma: ${data.company}\nE-mail: ${data.email}\nTelefon: ${data.phone}\n`
-      + `Zájem o: ${data.services}\nRozpočet: ${data.budget}\n\nZpráva:\n${data.message}\n\nAdministrace: ${env('URL') || 'https://create4you.cz'}/admin/#poptavky`;
-    await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${env('RESEND_API_KEY')}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ from: env('MAIL_FROM') || 'create4you <web@create4you.cz>', to: env('NOTIFY_EMAIL').split(','), reply_to: data.email, subject: `Nová poptávka: ${data.name}`, text }),
-    }).catch((err) => console.error('E-mail se nepodařilo odeslat', err));
+  const settings = {};
+  const s = await db('settings?select=key,value&key=in.(stat_response,contact_email,contact_phone,contact_name)');
+  if (s.ok) for (const { key, value } of await s.json()) settings[key] = value;
+  const hours = settings.stat_response || '24';
+
+  // E-maily: upozornění nám (odpověď jde rovnou zákazníkovi) a potvrzení zákazníkovi
+  if (mailConfigured()) {
+    const notify = inquiryEmail(data, { id });
+    const confirm = confirmationEmail({ hours, contact: { email: settings.contact_email, phone: settings.contact_phone, name: settings.contact_name } });
+    const results = await Promise.allSettled([
+      sendMail({ to: (env('NOTIFY_EMAIL') || settings.contact_email || 'info@create4you.cz').split(',').map((x) => x.trim()), replyTo: data.email, ...notify }),
+      sendMail({ to: data.email, replyTo: settings.contact_email || undefined, ...confirm }),
+    ]);
+    results.forEach((r, i) => r.status === 'rejected' && console.error(i ? 'Potvrzení zákazníkovi se nepodařilo odeslat' : 'Upozornění na poptávku se nepodařilo odeslat', r.reason));
   }
 
-  let hours = '24';
-  const s = await db('settings?select=value&key=eq.stat_response');
-  if (s.ok) hours = (await s.json())[0]?.value || hours;
   return reply(req, true, `Děkujeme! Poptávka dorazila, ozveme se do ${hours} hodin.`);
 };

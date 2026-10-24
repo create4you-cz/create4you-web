@@ -7,7 +7,7 @@ Web agentury create4you – weby, aplikace a CRM na míru, šablonové weby do 4
 - **Netlify** hostuje hotové statické stránky. Web je rychlý, dobrý pro SEO a funguje i ve chvíli, kdy databáze spí.
 - **Supabase** drží obsah (reference, hodnocení, poptávky, nastavení), fotky (Storage) a přihlášení do administrace.
 - Po každé změně v administraci se web na Netlify sám přegeneruje, změny jsou vidět asi za minutu.
-- Kontaktní formulář posílá poptávky přes funkci na Netlify do Supabase a volitelně i e-mailem (Resend).
+- Kontaktní formulář posílá poptávky přes funkci na Netlify do Supabase. Každá poptávka zároveň přijde e-mailem a zákazník dostane potvrzení (odesílá se přes schránku na Seznamu).
 
 ```
 public/            statické soubory (CSS, JS, obrázky, administrace)
@@ -48,9 +48,11 @@ Vytvořte soukromý repozitář (např. `create4you-web`) a nahrajte do něj ten
    | `SUPABASE_SERVICE_ROLE_KEY` | klíč service_role (označte jako *secret*) |
    | `SITE_URL` | `https://create4you.cz` |
    | `BUILD_HOOK_URL` | viz krok 3 |
-   | `NOTIFY_EMAIL` *(volitelné)* | kam posílat upozornění na poptávky, např. `info@create4you.cz` |
-   | `RESEND_API_KEY` *(volitelné)* | API klíč z [resend.com](https://resend.com) pro e-maily o poptávkách |
-   | `MAIL_FROM` *(volitelné)* | odesílatel, např. `create4you <web@create4you.cz>` (doména ověřená v Resendu) |
+   | `SMTP_PASS` | heslo schránky info@create4you.cz (nebo heslo pro aplikace, pokud máte dvoufázové ověření), označte jako *secret*. Bez něj se e-maily o poptávkách neposílají |
+   | `SMTP_USER` *(volitelné)* | schránka, ze které se posílá, výchozí `info@create4you.cz` |
+   | `NOTIFY_EMAIL` *(volitelné)* | kam posílat upozornění na poptávky (více adres oddělte čárkou), výchozí je kontaktní e-mail z nastavení |
+   | `MAIL_FROM` *(volitelné)* | odesílatel, výchozí `create4you <info@create4you.cz>` |
+   | `RESEND_API_KEY` *(volitelné)* | místo SMTP lze posílat přes [resend.com](https://resend.com) (doména musí být v Resendu ověřená) |
 
 3. **Site configuration → Build & deploy → Build hooks → Add build hook** (název „Administrace“). Zkopírovanou adresu vložte do proměnné `BUILD_HOOK_URL`.
 4. **Deploys → Trigger deploy**.
@@ -71,7 +73,7 @@ Vytvořte soukromý repozitář (např. `create4you-web`) a nahrajte do něj ten
 | **Přehled** | statistiky, poslední poptávky, co je potřeba dokončit |
 | **Reference** | úpravy textů, screenshot pro počítač a mobil, galerie s popisky, odkazy (jazykové verze), řazení přetažením, skrytí, zvýraznění |
 | **Hodnocení** | autor, firma, text, hvězdičky, fotka, propojení s referencí |
-| **Poptávky** | vše z formuláře, stavy (nová / řeší se / zakázka / uzavřeno), interní poznámky |
+| **Poptávky** | vše z formuláře, stavy (nová / řeší se / zakázka / uzavřeno), interní poznámky. Každá nová poptávka přijde i e-mailem a zákazník dostane potvrzení |
 | **Nastavení** | kontakty, fakturační údaje, čísla v úvodu, ceník, sociální sítě, změna hesla |
 
 Obrázky se zmenší a převedou do WebP už v prohlížeči. U screenshotů se uloží rozměry, takže se na webu zobrazí v přesném poměru stran a nic se neořízne. Změny se na web propíšou automaticky. Tlačítkem *Web je aktuální / Čeká na zveřejnění* v levém panelu je můžete zveřejnit hned.

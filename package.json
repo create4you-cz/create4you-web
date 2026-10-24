@@ -9,7 +9,8 @@
     "serve": "python3 -m http.server 8090 --directory dist"
   },
   "dependencies": {
-    "@supabase/supabase-js": "2.45.4"
+    "@supabase/supabase-js": "2.45.4",
+    "nodemailer": "6.9.16"
   },
   "engines": {
     "node": ">=20"
