@@ -205,6 +205,26 @@ function photo_url(string $name): string
     return '';
 }
 
+/** Informační karty v ukázce šablonového webu (hodnocení, otevírací doba, termín…). */
+function tpl_facts(array $facts): string
+{
+    $icons = [
+        'star'     => '<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z" fill="currentColor"/>',
+        'calendar' => '<rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+        'shield'   => '<path d="M12 3l7.5 3v5.5c0 4.4-3.2 8.2-7.5 9.5-4.3-1.3-7.5-5.1-7.5-9.5V6z"/><path d="M8.8 12l2.2 2.2 4.2-4.4"/>',
+        'check'    => '<circle cx="12" cy="12" r="8.5"/><path d="M8.3 12.2l2.5 2.5 5-5.2"/>',
+        'clock'    => '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+        'cup'      => '<path d="M4.5 9h12v5a5 5 0 01-5 5h-2a5 5 0 01-5-5zM16.5 10.5h1.5a2.5 2.5 0 010 5h-1.8M8 3.5c0 1.5 1.5 1.5 1.5 3M12 3.5c0 1.5 1.5 1.5 1.5 3"/>',
+        'gift'     => '<rect x="3.5" y="8.5" width="17" height="4" rx="1"/><path d="M5 12.5V20h14v-7.5M12 8.5V20M12 8.5C10.5 4.5 6.5 5 7.5 7.4 8.2 8.5 12 8.5 12 8.5zM12 8.5c1.5-4 5.5-3.5 4.5-1.1-.7 1.1-4.5 1.1-4.5 1.1z"/>',
+    ];
+    $out = '';
+    foreach ($facts as $i => [$icon, $title, $sub]) {
+        $out .= '<div class="tf-fact" style="--i:' . $i . '"><span class="tf-fi"><svg viewBox="0 0 24 24">' . ($icons[$icon] ?? '') . '</svg></span>'
+              . '<span><b>' . e($title) . '</b><small>' . e($sub) . '</small></span></div>';
+    }
+    return $out;
+}
+
 function stars(float $rating): string
 {
     $full = (int) round($rating);

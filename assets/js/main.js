@@ -265,10 +265,10 @@
     $('.tf-sub', frame).textContent = d.sub;
     $('.tf-btn', frame).textContent = d.btn;
     $('.tf-url b', frame).textContent = d.url;
-    $('.tf-badge', frame).textContent = d.badge;
     const img = $('.tf-img', frame);
     img.classList.toggle('has-photo', !!d.photo);
     img.style.backgroundImage = d.photo ? `url(${d.photo})` : '';
+    img.innerHTML = d.factsHtml;
     $('.tf-cards', frame).innerHTML = d.cards.map(([t, s], i) => `<div><span class="tf-ci">${i + 1}</span><b>${t}</b><small>${s}</small></div>`).join('');
     const page = $('.tf-page', frame);
     page.classList.remove('tf-swap');

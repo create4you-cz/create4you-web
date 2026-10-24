@@ -301,7 +301,6 @@ body::before {
 .tf-title { font: 700 clamp(22px, 2.6vw, 34px)/1.08 var(--t-font); letter-spacing: -.02em; margin: 8px 0 10px; color: var(--t-ink); transition: font-family .3s; }
 .tf-sub { font-size: 14px; opacity: .7; margin-bottom: 16px; }
 .tf-btn { display: inline-block; white-space: nowrap; font-size: 13px; font-weight: 600; color: #fff; background: var(--t-acc); padding: 10px 16px; border-radius: 10px; }
-.tf-img { aspect-ratio: 4 / 3.4; border-radius: 16px; background: var(--t-img); position: relative; overflow: hidden; transition: background .6s; }
 .tf-swap .tf-hero, .tf-swap .tf-cards { animation: swap .6s var(--ease); }
 @keyframes swap { from { opacity: 0; transform: translateY(10px); } }
 .tpl-note { color: var(--muted); font-size: 14px; margin-top: 14px; }
@@ -789,14 +788,21 @@ body::before {
 @keyframes ring { to { stroke-dashoffset: 2; } }
 
 /* ---------- šablony: realistický obsah ---------- */
+.tf-img { position: relative; display: flex; flex-direction: column; justify-content: center; gap: 10px; padding: 18px; border-radius: 16px; min-height: 230px; background-size: cover; background-position: center;
+  background-color: color-mix(in srgb, var(--t-acc) 12%, var(--t-bg));
+  background-image: radial-gradient(90% 80% at 100% 0%, color-mix(in srgb, var(--t-acc) 30%, transparent), transparent 65%), radial-gradient(color-mix(in srgb, var(--t-ink) 12%, transparent) 1px, transparent 1.5px);
+  background-size: auto, 14px 14px; }
+.tf-img.has-photo { background-size: cover; }
+.tf-fact { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; background: #fff; color: #1b1e24; box-shadow: 0 10px 24px -14px rgba(0, 0, 0, .45); transform: translateX(calc(var(--i) * 12px)); width: calc(100% - 24px); }
+.tf-fact b { display: block; font: 600 13px/1.25 var(--t-font); }
+.tf-fact small { display: block; font-size: 11px; color: #6b6b72; }
+.tf-fi { width: 32px; height: 32px; flex: none; border-radius: 10px; display: grid; place-items: center; color: var(--t-acc); background: color-mix(in srgb, var(--t-acc) 14%, #fff); }
+.tf-fi svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.tf-swap .tf-fact { animation: swap .6s var(--ease) both; animation-delay: calc(var(--i) * 80ms); }
 .tf-logo { display: flex; align-items: baseline; gap: 4px; }
 .tf-logo-b { color: var(--t-acc); font-weight: 500; }
 .tf-links { display: flex; gap: 16px; font-size: 12px; opacity: .7; }
 .tf-btn2 { display: inline-block; margin-left: 6px; font-size: 12px; font-weight: 600; padding: 8.5px 12px; border-radius: 10px; border: 1.5px solid currentColor; opacity: .8; white-space: nowrap; }
-.tf-img { display: flex; align-items: flex-end; justify-content: flex-start; padding: 14px; background-size: cover; background-position: center;
-  background-image: radial-gradient(120% 90% at 85% 10%, color-mix(in srgb, var(--t-acc) 55%, transparent), transparent 60%), repeating-linear-gradient(135deg, color-mix(in srgb, var(--t-acc) 14%, transparent) 0 2px, transparent 2px 14px), linear-gradient(160deg, color-mix(in srgb, var(--t-acc) 30%, var(--t-bg)), color-mix(in srgb, var(--t-ink) 85%, var(--t-acc))); }
-.tf-img.has-photo { background-color: #000; }
-.tf-badge { font-size: 12px; font-weight: 600; color: #1b1e24; background: #fff; padding: 7px 12px; border-radius: 99px; box-shadow: 0 8px 20px -8px rgba(0, 0, 0, .4); }
 .tf-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 22px; }
 .tf-cards div { display: flex; flex-direction: column; gap: 2px; padding: 14px; border-radius: 12px; background: color-mix(in srgb, var(--t-ink) 5%, var(--t-bg)); border: 1px solid color-mix(in srgb, var(--t-ink) 9%, transparent); }
 .tf-cards b { font: 600 14px var(--t-font); }
@@ -895,7 +901,8 @@ body::before {
   .work.big { grid-column: span 1; }
   .tile, .vs-card, .stack-card { padding: 26px; }
   .tf-hero { grid-template-columns: 1fr; }
-  .tf-img { min-height: 150px; }
+  .tf-img { min-height: 0; }
+  .tf-fact { transform: none; width: 100%; }
   .tf-links, .tf-btn2 { display: none; }
   .tf-cards { grid-template-columns: 1fr; }
   .tf-page { padding: 14px 18px 20px; }

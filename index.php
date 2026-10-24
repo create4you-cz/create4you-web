@@ -21,17 +21,18 @@ $showcase = array_slice($showcase, 0, 4);
 
 // Ukázky šablonových webů (fotky: assets/img/photos/tpl-<styl>.webp)
 $templates = [
-    'remeslo' => ['label' => 'Řemeslo', 'logo' => 'Novák', 'logoSub' => 'stavby', 'url' => 'novak-stavby', 'kicker' => 'Ostrava a okolí', 'title' => 'Rekonstrukce, na které se můžete spolehnout', 'sub' => 'Bytová jádra, koupelny a kompletní rekonstrukce. Pevná cena a termín ve smlouvě.', 'btn' => 'Nezávazná poptávka', 'nav' => ['Služby', 'Realizace', 'Ceník'], 'badge' => '4,9 ★ Google · 86 recenzí',
+    'remeslo' => ['label' => 'Řemeslo', 'logo' => 'Novák', 'logoSub' => 'stavby', 'url' => 'novak-stavby', 'kicker' => 'Ostrava a okolí', 'title' => 'Rekonstrukce, na které se můžete spolehnout', 'sub' => 'Bytová jádra, koupelny a kompletní rekonstrukce. Pevná cena a termín ve smlouvě.', 'btn' => 'Nezávazná poptávka', 'nav' => ['Služby', 'Realizace', 'Ceník'], 'facts' => [['star', '4,9 z 5 na Googlu', '86 ověřených recenzí'], ['calendar', 'Volný termín', 'od 12. listopadu'], ['shield', 'Záruka 5 let', 'na všechny práce']],
                     'cards' => [['Koupelny', 'Na klíč do 3 týdnů'], ['Bytová jádra', 'Bez stěhování nábytku'], ['Podlahy', 'Vinyl, dřevo, dlažba']]],
-    'sluzby'  => ['label' => 'Služby & kancelář', 'logo' => 'Účetní', 'logoSub' => 'Plus', 'url' => 'ucetniplus', 'kicker' => 'Účetnictví & daně', 'title' => 'Starosti s papíry nechte na nás', 'sub' => 'Vedení účetnictví, mzdy a daňová přiznání pro OSVČ i firmy. Online, bez běhání po úřadech.', 'btn' => 'Domluvit schůzku', 'nav' => ['Služby', 'O nás', 'Ceník'], 'badge' => '120+ spokojených klientů',
+    'sluzby'  => ['label' => 'Služby & kancelář', 'logo' => 'Účetní', 'logoSub' => 'Plus', 'url' => 'ucetniplus', 'kicker' => 'Účetnictví & daně', 'title' => 'Starosti s papíry nechte na nás', 'sub' => 'Vedení účetnictví, mzdy a daňová přiznání pro OSVČ i firmy. Online, bez běhání po úřadech.', 'btn' => 'Domluvit schůzku', 'nav' => ['Služby', 'O nás', 'Ceník'], 'facts' => [['check', 'Konzultace zdarma', 'první schůzka do 48 h'], ['clock', 'Po–Pá 8:00–17:00', 'i online přes video'], ['star', '120+ klientů', 'OSVČ i firmy']],
                     'cards' => [['Účetnictví', 'Od 1 900 Kč / měsíc'], ['Mzdy', 'Včetně ČSSZ a ZP'], ['Daně', 'Přiznání bez stresu']]],
-    'gastro'  => ['label' => 'Kavárna & gastro', 'logo' => 'Café', 'logoSub' => 'Lumen', 'url' => 'cafelumen', 'kicker' => 'Výběrová káva · Ostrava', 'title' => 'Místo, kam se rádi vracíte', 'sub' => 'Snídaně celý den, domácí dorty a káva z lokální pražírny. Otevřeno denně od 7:30.', 'btn' => 'Rezervovat stůl', 'nav' => ['Menu', 'Galerie', 'Rezervace'], 'badge' => 'Dnes otevřeno do 20:00',
+    'gastro'  => ['label' => 'Kavárna & gastro', 'logo' => 'Café', 'logoSub' => 'Lumen', 'url' => 'cafelumen', 'kicker' => 'Výběrová káva · Ostrava', 'title' => 'Místo, kam se rádi vracíte', 'sub' => 'Snídaně celý den, domácí dorty a káva z lokální pražírny. Otevřeno denně od 7:30.', 'btn' => 'Rezervovat stůl', 'nav' => ['Menu', 'Galerie', 'Rezervace'], 'facts' => [['clock', 'Dnes otevřeno', '7:30 – 20:00'], ['cup', 'Polévka dne', 'Krémová dýňová · 65 Kč'], ['star', '4,8 na Googlu', '312 recenzí']],
                     'cards' => [['Snídaně', 'Celý den'], ['Dorty', 'Pečeme každé ráno'], ['Káva', 'Lokální pražírna']]],
-    'beauty'  => ['label' => 'Beauty & zdraví', 'logo' => 'Studio', 'logoSub' => 'Aura', 'url' => 'studioaura', 'kicker' => 'Kosmetika & wellness', 'title' => 'Péče, kterou si zasloužíte', 'sub' => 'Ošetření pleti, masáže a manikúra v klidném prostředí centra města.', 'btn' => 'Objednat termín', 'nav' => ['Ošetření', 'Ceník', 'Dárkové poukazy'], 'badge' => 'Volný termín: zítra 14:00',
+    'beauty'  => ['label' => 'Beauty & zdraví', 'logo' => 'Studio', 'logoSub' => 'Aura', 'url' => 'studioaura', 'kicker' => 'Kosmetika & wellness', 'title' => 'Péče, kterou si zasloužíte', 'sub' => 'Ošetření pleti, masáže a manikúra v klidném prostředí centra města.', 'btn' => 'Objednat termín', 'nav' => ['Ošetření', 'Ceník', 'Dárkové poukazy'], 'facts' => [['calendar', 'Volný termín', 'zítra ve 14:00'], ['gift', 'Dárkové poukazy', 'od 500 Kč'], ['star', '5,0 na Googlu', '64 recenzí']],
                     'cards' => [['Ošetření pleti', 'od 890 Kč'], ['Masáže', 'od 690 Kč'], ['Manikúra', 'od 450 Kč']]],
 ];
 foreach ($templates as $k => &$t) {
     $t['photo'] = photo_url('tpl-' . $k);
+    $t['factsHtml'] = tpl_facts($t['facts']);
 }
 unset($t);
 $tpl0 = reset($templates);
@@ -258,9 +259,7 @@ site_nav();
                 <p class="tf-sub"><?= e($tpl0['sub']) ?></p>
                 <span class="tf-btn"><?= e($tpl0['btn']) ?></span><span class="tf-btn2">+420 777 123 456</span>
               </div>
-              <div class="tf-img <?= $tpl0['photo'] ? 'has-photo' : '' ?>" <?= $tpl0['photo'] ? 'style="background-image:url(' . e($tpl0['photo']) . ')"' : '' ?>>
-                <span class="tf-badge"><?= e($tpl0['badge']) ?></span>
-              </div>
+              <div class="tf-img <?= $tpl0['photo'] ? 'has-photo' : '' ?>" <?= $tpl0['photo'] ? 'style="background-image:url(' . e($tpl0['photo']) . ')"' : '' ?>><?= $tpl0['factsHtml'] ?></div>
             </div>
             <div class="tf-cards"><?php foreach ($tpl0['cards'] as $i => [$ct, $cs]): ?><div><span class="tf-ci"><?= $i + 1 ?></span><b><?= e($ct) ?></b><small><?= e($cs) ?></small></div><?php endforeach; ?></div>
           </div>
